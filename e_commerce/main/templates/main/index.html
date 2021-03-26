@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bomzhon</title>
+  </head>
+  <body>
+    <p>Добро пожаловать в Бомжон! Сайт все ещё в разработке</p>
+    {% load flatpages %}
+    {% get_flatpages as flatpages %}
+    <ul>
+        {% for page in flatpages %}
+            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% endfor %}
+    </ul>
+  </body>
+</html>
