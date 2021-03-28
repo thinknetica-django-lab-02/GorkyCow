@@ -69,6 +69,6 @@ class Goods(models.Model):
 
     def __repr__(self):
         return (
-            f"Goods(name='{self.name}', description='{self.description}', seller={self.seller}, weight={self.weight}, "
-            "category={self.category}, manufacturer='{self.manufacturer}', tags={self.tags}, size='{self.size}', rating={self.rating}, price={self.price})"
+            f"Goods(name='{self.name}', description='{self.description}', seller={self.seller}, weight={self.weight}, " +
+            f"category={self.category}, manufacturer='{self.manufacturer}', tags={self.tags.all()}, size='{self.size}', rating={self.rating}, price={self.price})"
         )
