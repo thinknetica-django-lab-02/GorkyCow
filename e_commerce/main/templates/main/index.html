@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Bomzhon</title>
-  </head>
-  <body>
-    <p>Добро пожаловать в Бомжон! Сайт все ещё в разработке</p>
-    {% load flatpages %}
-    {% get_flatpages as flatpages %}
-    <ul>
-        {% for page in flatpages %}
-            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-        {% endfor %}
-    </ul>
-  </body>
-</html>
+{% extends 'main/base.html' %}
+
+{% block page_title_header %}<title>Bomzhon</title>{% endblock %}
+
+{% block content %}
+  <h1>Добро пожаловать в Бомжон!</h1>
+  <p class="lead">Сайт все ещё в разработке<br>Попробуйте зайти позже</p>
+{% endblock %}
