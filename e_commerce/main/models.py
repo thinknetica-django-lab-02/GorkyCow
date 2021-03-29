@@ -63,12 +63,13 @@ class Goods(models.Model):
     size = models.CharField(max_length=1, choices=SIZES, null=True)
     rating = models.FloatField(default=5.0)
     price = models.FloatField(default=0)
+    discount = models.FloatField(default=0, null=False)
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return (
-            f"Goods(name='{self.name}', description='{self.description}', seller={self.seller}, weight={self.weight}, " +
-            f"category={self.category}, manufacturer='{self.manufacturer}', tags={self.tags.all()}, size='{self.size}', rating={self.rating}, price={self.price})"
+            f"Goods(name='{self.name}', description='{self.description}', seller={self.seller}, weight={self.weight}, "
+            + f"category={self.category}, manufacturer='{self.manufacturer}', tags={self.tags.all()}, size='{self.size}', rating={self.rating}, price={self.price})"
         )
