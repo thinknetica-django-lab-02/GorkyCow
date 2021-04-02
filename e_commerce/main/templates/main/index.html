@@ -5,4 +5,24 @@
 {% block content %}
   <h1>Добро пожаловать в Бомжон!</h1>
   <p class="lead">Сайт все ещё в разработке<br>Попробуйте зайти позже</p>
+  {% if turn_on_block %}
+    <div class="card mb-4 shadow-sm">
+      <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Future Sale"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="45%" y="50%" fill="#eceeef" dy=".3em">Большая распродажа</text></svg>
+      <div class="card-body">
+        <p class="card-text">Ликвидация магазина, бла-бла-бла, отдаём все задарма, покупай скорее.</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Уже бегу!</button>
+          </div>
+          <small class="text-muted">Осталось 9 минут!</small>
+        </div>
+      </div>
+    </div>
+  {% else %}
+  {% endif %}
+  {% if user.is_authenticated %}
+    <p class="lead">Привет, {{ user.get_username }}. Любишь ли ты песни Ирины Олегровой?</p>
+  {% else %}
+    <p class="lead">Привет, Андрей. Ну или залогинься, если ты не Андрей.</p>
+  {% endif %}
 {% endblock %}
