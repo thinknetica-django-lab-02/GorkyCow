@@ -2,6 +2,10 @@
 
 {% block page_title_header %}<title>Bomzhon</title>{% endblock %}
 
+{% block header %}
+    {% include 'main/header.html' with user=user %}
+{% endblock %}
+
 {% block content %}
   <h1>Добро пожаловать в Бомжон!</h1>
   <p class="lead">Сайт все ещё в разработке<br>Попробуйте зайти позже</p>
