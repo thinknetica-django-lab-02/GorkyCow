@@ -39,6 +39,11 @@ def dyslexia(value):
         return value
 
 
+@register.filter(name="revert", is_safe=True)
+def revert(value):
+    return value[::-1]
+
+
 @register.simple_tag
 def current_time(format_string):
     return datetime.datetime.now().strftime(format_string)
