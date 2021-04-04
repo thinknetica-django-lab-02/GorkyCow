@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+
+{% block page_title_header %}<title>Каталог</title>{% endblock %}
+
+{% block header %}
+    {% include 'main/header.html' with user=user %}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ object.name }}</h1>
+    <div class="card mb-4 shadow-sm">
+        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Future Sale"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">{{ object.description }}</text></svg>
+        <div class="card-body">
+          <p class="card-text">{{ object.manufacturer }}</p>
+          <p class="card-text"></p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary">В корзину</button>
+            </div>
+            
+            <small class="text-muted">
+                {% for tag in object.tags.all %}
+                    {{ tag.name }} 
+                {% endfor %}
+            </small>
+          </div>
+        </div>
+      </div>
+{% endblock %}
