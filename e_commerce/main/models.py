@@ -65,6 +65,9 @@ class Goods(models.Model):
     price = models.FloatField(default=0)
     discount = models.FloatField(default=0, null=False)
 
+    class Meta:
+        ordering = ["-name"]
+
     def __str__(self):
         return self.name
 
