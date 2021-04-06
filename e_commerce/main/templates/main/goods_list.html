@@ -9,24 +9,60 @@
 {% block content %}
 <div class="container">
     <h1>Каталог</h1>
+
+    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded shadow-sm">
+      <img class="mr-3" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-outline.svg" alt="" width="48" height="48">
+      <div class="lh-100">
+        <h6 >Bomzhon. Популярные теги</h6>
+        <small>
+          {% for tag in tag_list %}
+            <a href="{{ request.path }}?tag={{ tag.name }}" class="badge badge-light">{{ tag.name }}</a>
+          {% endfor %}
+        </small>
+      </div>
+    </div>
+
     <div class="row">
-    {% for goods in object_list %}
-      <div class="col-md-4">
-        <div class="card mb-4 shadow-sm">
-          <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>{{ goods.name }}</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">{{ goods.name }}</text></svg>
-          <div class="card-body">
-            <p class="card-text">{{ goods.description }}</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-outline-secondary">В корзину</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/goods/{{ goods.id }}/">Подробнее</a></button>
+    {% if goods_list %}
+      {% for goods in goods_list %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>{{ goods.name }}</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">{{ goods.name }}</text></svg>
+            <div class="card-body">
+              <p class="card-text">{{ goods.description }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">В корзину</button>
+                  <a role="button" class="btn btn-sm btn-outline-secondary" href="{% url 'goods-detail' goods.pk %}">Подробнее</a>
+                </div>
+                <small class="text-muted">{{ goods.rating }}</small>
               </div>
-              <small class="text-muted">100500 лайков</small>
             </div>
           </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    {% else %}
+      <p class="lead">В каталоге пока нет товаров</p>
+    {% endif %}
     </div>
   </div>
 {% endblock %}
+{% block pagination %}
+  {% if is_paginated %}
+    <div class="pagination">
+      <span class="page-links">
+          {% if page_obj.has_previous %}
+              <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">&larr;</a>
+          {% endif %}
+          <span class="page-current">
+            {% for page_number in page_obj.paginator.page_range %}
+              <a href="{{ request.path }}?page={{ page_number }}" role="button" class="btn btn-sm btn-outline-secondary">{{ page_number }}</a>
+            {% endfor %}
+          </span>
+          {% if page_obj.has_next %}
+              <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">&rarr;</a>
+          {% endif %}
+      </span>
+    </div>
+  {% endif %}
+{% endblock %} 

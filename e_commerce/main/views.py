@@ -1,22 +1,32 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404, render
+from django.views.generic import DetailView, ListView
 
 from main.models import Goods, Tag
 
 
 class GoodsList(ListView):
     model = Goods
-    context_object_name = "goods"
-
-
-class GoodsDetail(DetailView):
-    queryset = Goods.objects.all()
-    context_object_name = 'goods'
+    paginate_by = 9
+    context_object_name = "goods_list"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["tag_list"] = Tag.objects.all()
+        context["tag"] = self.request.GET.get("tag")
         return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.GET.get("tag"):
+            self.tag = get_object_or_404(Tag, name=self.request.GET.get("tag"))
+            return queryset.filter(tags=self.tag)
+        else:
+            return queryset
+
+
+class GoodsDetail(DetailView):
+    queryset = Goods.objects.all()
+    context_object_name = "goods"
 
 
 def index(request):
