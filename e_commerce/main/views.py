@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
+from django.views.generic.edit import UpdateView
 
-from main.models import Goods, Tag
+from main.models import Goods, Tag, Profile
+from main.forms import ProfileForm
 
 
 class GoodsList(ListView):
@@ -27,6 +29,13 @@ class GoodsList(ListView):
 class GoodsDetail(DetailView):
     queryset = Goods.objects.all()
     context_object_name = "goods"
+
+
+class ProfileUpdate(UpdateView):
+    model = Profile
+    form_class = ProfileForm
+    template_name = "main/profile_update.html"
+    context_object_name = "profile"
 
 
 def index(request):

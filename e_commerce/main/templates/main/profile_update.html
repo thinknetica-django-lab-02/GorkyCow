@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+
+{% block page_title_header %}<title>Редактирование профиля</title>{% endblock %}
+
+{% block header %}
+    {% include 'main/header.html' with user=user %}
+{% endblock %}
+
+{% block content %}
+<div class="py-5 text-center">
+    <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <h2>Редактирование профиля</h2>
+    <p class="lead">Расскажите нам о себе</p>
+  </div>
+<form class="needs-validation" novalidate="" method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="first_name">Имя</label>
+        <input type="text" name="first_name" maxlength="80" class="form-control" id="id_first_name" placeholder="{{ profile.first_name }}" value="{{ profile.first_name }}" required="">
+        <div class="invalid-feedback">
+          Имя является обязательным полем.
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="last_name">Фамилия</label>
+        <input type="text" name="last_name" maxlength="80" class="form-control" id="id_last_name" placeholder="{{ profile.last_name }}" value="{{ profile.last_name }}" required="">
+        <div class="invalid-feedback">
+          Фамилия является обязательным полем.
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="email">Email</label>
+      <input type="email" name="email" maxlength="254" class="form-control" id="id_email" placeholder="{{ profile.email|default:'you@email.com' }}" value="{{ profile.email }}">
+      <div class="invalid-feedback">
+        Пожалуйста, введите валидный email-адрес
+      </div>
+    </div>
+    <hr class="mb-4">
+    <button class="btn btn-primary btn-lg btn-block" type="submit" value="Update">Сохранить</button>
+  </form>
+{% endblock %}
