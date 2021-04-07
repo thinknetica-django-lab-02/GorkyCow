@@ -6,21 +6,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0003_goods_discount'),
+        ("main", "0003_goods_discount"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Profile',
+            name="Profile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(max_length=80)),
-                ('last_name', models.CharField(max_length=80)),
-                ('email', models.EmailField(max_length=254)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("first_name", models.CharField(max_length=80)),
+                ("last_name", models.CharField(max_length=80)),
+                ("email", models.EmailField(max_length=254)),
             ],
         ),
         migrations.AlterModelOptions(
-            name='goods',
-            options={'ordering': ['name']},
+            name="goods",
+            options={"ordering": ["name"]},
         ),
     ]

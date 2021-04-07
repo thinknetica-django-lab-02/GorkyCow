@@ -39,6 +39,11 @@ def dyslexia(value):
         return value
 
 
+@register.filter(name="addclass")
+def addclass(value, arg):
+    return value.as_widget(attrs={"class": arg})
+
+
 @register.filter(name="revert", is_safe=True)
 def revert(value):
     return value[::-1]
