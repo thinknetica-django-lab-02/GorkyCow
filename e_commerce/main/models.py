@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Seller(models.Model):
@@ -76,3 +77,12 @@ class Goods(models.Model):
             f"Goods(name='{self.name}', description='{self.description}', seller={self.seller}, weight={self.weight}, "
             + f"category={self.category}, manufacturer='{self.manufacturer}', tags={self.tags.all()}, size='{self.size}', rating={self.rating}, price={self.price})"
         )
+
+
+class Profile(models.Model):
+    first_name = models.CharField(max_length=80)
+    last_name = models.CharField(max_length=80)
+    email = models.EmailField(max_length=254)
+
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'pk': self.pk})
