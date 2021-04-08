@@ -1,4 +1,4 @@
-from main.models import Category, Goods, Seller, Tag, Profile
+from main.models import Category, Goods, Profile, Seller, Tag
 
 cat = Category(name="Toys")
 cat.save()

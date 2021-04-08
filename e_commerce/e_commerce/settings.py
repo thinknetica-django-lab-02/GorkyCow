@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.flatpages",
     "main",
     "ckeditor",
+    "phone_field",
 ]
 
 MIDDLEWARE = [

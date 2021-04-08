@@ -14,29 +14,47 @@
   </div>
 <form class="needs-validation" novalidate="" method="post">
     {% csrf_token %}
+    {% load main_extras %}
     <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="first_name">Имя</label>
-        <input type="text" name="first_name" maxlength="80" class="form-control" id="id_first_name" placeholder="{{ profile.first_name }}" value="{{ profile.first_name }}" required="">
-        <div class="invalid-feedback">
-          Имя является обязательным полем.
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="last_name">Фамилия</label>
-        <input type="text" name="last_name" maxlength="80" class="form-control" id="id_last_name" placeholder="{{ profile.last_name }}" value="{{ profile.last_name }}" required="">
-        <div class="invalid-feedback">
-          Фамилия является обязательным полем.
-        </div>
-      </div>
+        {% for field in user_form %}
+            {% if "name" in field.name %}
+                <div class="col-md-6 mb-3">
+                    {{ field.label_tag }} {{ field|addclass:'form-control' }}
+                </div>
+                <div class="invalid-feedback">
+                    {{ field.label_tag }} является обязательным полем.
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
-    <div class="mb-3">
-      <label for="email">Email</label>
-      <input type="email" name="email" maxlength="254" class="form-control" id="id_email" placeholder="{{ profile.email|default:'you@email.com' }}" value="{{ profile.email }}">
-      <div class="invalid-feedback">
-        Пожалуйста, введите валидный email-адрес
-      </div>
+    
+    {% for field in user_form %}
+        {% if not "name" in field.name %}
+            <div class="mb-3">
+                {{ field.label_tag }} {{ field|addclass:'form-control' }}
+            </div>
+            <div class="invalid-feedback">
+                Поле {{ field.label_tag }} не валидно
+            </div>
+        {% endif %}
+    {% endfor %}
+    <hr class="mb-4">
+
+    {{ profile_form_set.management_form }}
+    {% for form in profile_form_set %}
+    <div class="row">
+        {% for field in form %}
+            {% if "user" != field.name %}
+                <div class="col-md-6 mb-3">
+                    {{ field.label_tag }} {{ field|addclass:'form-control' }}
+                </div>
+                <div class="invalid-feedback">
+                    Поле {{ field.label_tag }} не валидно
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
+    {% endfor %}
     <hr class="mb-4">
     <button class="btn btn-primary btn-lg btn-block" type="submit" value="Update">Сохранить</button>
   </form>
