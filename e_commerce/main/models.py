@@ -94,9 +94,10 @@ class Profile(models.Model):
     )
     phone_regex = RegexValidator(
         regex=r"^\+?1?\d{9,15}$",
-        message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
+        message="Телефонный номер должен быть в формате: '+999999999' и не длиннее 15 символов.",
     )
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse("profile", kwargs={"pk": self.pk})
