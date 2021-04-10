@@ -56,7 +56,7 @@ class Goods(models.Model):
     seller = models.ForeignKey(
         Seller, on_delete=models.CASCADE, verbose_name="the related seller"
     )
-    weight = models.FloatField()
+    weight = models.FloatField(null=True, blank=True)
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -65,7 +65,7 @@ class Goods(models.Model):
     )
     manufacturer = models.CharField(max_length=80)
     tags = models.ManyToManyField(Tag)
-    size = models.CharField(max_length=1, choices=SIZES, null=True)
+    size = models.CharField(max_length=1, choices=SIZES, null=True, blank=True)
     rating = models.FloatField(default=5.0)
     price = models.FloatField(default=0)
     discount = models.FloatField(default=0, null=False)

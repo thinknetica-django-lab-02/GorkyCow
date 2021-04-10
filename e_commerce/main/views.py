@@ -1,11 +1,11 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import CreateView, UpdateView
 
-from main.forms import ProfileFormSet, UserForm
-from main.models import Goods, Tag, User
+from main.forms import GoodsCreateUpdateForm, ProfileFormSet, UserForm
+from main.models import Goods, Seller, Tag, User
 
 
 class GoodsList(ListView):
@@ -31,6 +31,91 @@ class GoodsList(ListView):
 class GoodsDetail(DetailView):
     queryset = Goods.objects.all()
     context_object_name = "goods"
+    # TODO: Приделать кнопку редактирования в шаблоне, которая отображается если у пользователя есть права на редактирование товара (если он продавец)
+
+
+class GoodsCreate(CreateView):
+    model = Goods
+    template_name = "main/goods_create.html"
+    form_class = GoodsCreateUpdateForm
+
+    def get_success_url(self):
+        self.success_url = reverse("goods-detail", kwargs={"pk": self.object.pk})
+        return self.success_url
+
+    def get_context_data(self, **kwargs):
+        if "form" not in kwargs:
+            kwargs["form"] = self.get_form()
+        context = super().get_context_data(**kwargs)
+        context["filds_for_form_control"] = (
+            "name",
+            "description",
+            "weight",
+            "manufacturer",
+            "price",
+            "discount",
+        )
+        context["filds_for_custom_select"] = ("tags", "size", "category")
+        context["form"] = kwargs.get("form")
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        if self.get_form().is_valid():
+            return self.form_valid(self.get_form())
+        else:
+            return self.form_invalid(self.get_form())
+
+    def form_valid(self, form):
+        temp_goods = form.save(commit=False)
+        temp_goods.seller = Seller.objects.get(
+            name="Bobbie's Bits"
+        )  # TODO: заменить на юзера, когда будет готова авторизация для продавцов
+        self.object = form.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+class GoodsUpdate(UpdateView):
+    model = Goods
+    template_name = "main/goods_update.html"
+    form_class = GoodsCreateUpdateForm
+
+    def get_success_url(self):
+        self.success_url = reverse("goods-detail", kwargs={"pk": self.object.pk})
+        return self.success_url
+
+    def get_context_data(self, **kwargs):
+        if "form" not in kwargs:
+            kwargs["form"] = self.get_form()
+        context = super().get_context_data(**kwargs)
+        context["filds_for_form_control"] = (
+            "name",
+            "description",
+            "weight",
+            "manufacturer",
+            "price",
+            "discount",
+        )
+        context["filds_for_custom_select"] = ("tags", "size", "category")
+        context["form"] = kwargs.get("form")
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.get_form().is_valid():
+            return self.form_valid(self.get_form())
+        else:
+            return self.form_invalid(self.get_form())
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class ProfileUpdate(UpdateView):
@@ -45,12 +130,12 @@ class ProfileUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context["user_form"] = kwargs["user_form"]
-            context["profile_form_set"] =  kwargs["profile_form_set"]
-        else:
-            context["user_form"] = UserForm(instance=self.object)
-            context["profile_form_set"] = ProfileFormSet(instance=self.object)
+        if "user_form" not in kwargs:
+            kwargs["user_form"] = UserForm(instance=self.object)
+        if "profile_form_set" not in kwargs:
+            kwargs["profile_form_set"] = ProfileFormSet(instance=self.object)
+        context["user_form"] = kwargs.get("user_form")
+        context["profile_form_set"] = kwargs.get("profile_form_set")
         return context
 
     def get(self, request, *args, **kwargs):

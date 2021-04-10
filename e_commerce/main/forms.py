@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, widgets
 from django.utils.translation import gettext as _
 
-from .models import Profile, User
+from .models import Category, Goods, Profile, Tag, User
 
 
 class UserForm(forms.ModelForm):
@@ -33,6 +33,53 @@ class ProfileForm(forms.ModelForm):
         }
 
 
+class GoodsCreateUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Goods
+        fields = (
+            "name",
+            "description",
+            "weight",
+            "category",
+            "manufacturer",
+            "tags",
+            "size",
+            "price",
+            "discount",
+        )
+        labels = {
+            "name": "Название",
+            "description": "Описание",
+            "weight": "Вес",
+            "category": "Категория",
+            "manufacturer": "Производитель",
+            "tags": "Тэги",
+            "size": "Размер",
+            "price": "Цена",
+            "discount": "Скидка",
+        }
+        widgets = {
+            "description": forms.widgets.Textarea(attrs={"cols": 60, "rows": 5}),
+            "weight": forms.widgets.NumberInput(),
+            "category": forms.widgets.Select(choices=Category.objects.all()),
+            "tags": forms.widgets.SelectMultiple(choices=Tag.objects.all()),
+            "size": forms.widgets.Select(),
+            "price": forms.widgets.NumberInput(),
+            "discount": forms.widgets.NumberInput(),
+        }
+
+    def clean_discount(self):
+        data = self.cleaned_data["discount"]
+        if data > 90:
+            raise ValidationError(
+                _("Скидка не может быть больше 90 процентов. Введено: %(value)s"),
+                code="invalid",
+                params={"value": data},
+            )
+
+        return data
+
+
 class ProfileFormSet(
     inlineformset_factory(
         User,
@@ -54,7 +101,7 @@ class ProfileFormSet(
     )
 ):
     def __init__(self, *args, **kwargs):
-        self.__initial = kwargs.pop('initial', [])
+        self.__initial = kwargs.pop("initial", [])
         super(ProfileFormSet, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -65,13 +112,13 @@ class ProfileFormSet(
 
             if birth_date:
                 today = date.today()
-                #import pdb
-                #pdb.set_trace()
+                # import pdb
+                # pdb.set_trace()
                 if (today - relativedelta(years=18)) < birth_date:
                     msg = "Доступ к сайту разрешён лицам старше 18 лет"
                     form.add_error("birth_date", msg)
                     raise ValidationError(
-                            _("Too young: %(value)s"),
-                            code="invalid",
-                            params={"value": birth_date},
-                        )    
+                        _("Too young: %(value)s"),
+                        code="invalid",
+                        params={"value": birth_date},
+                    )
