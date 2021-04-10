@@ -1,8 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from main.forms import GoodsCreateUpdateForm, ProfileFormSet, UserForm
 from main.models import Goods, Seller, Tag, User, Profile
@@ -46,7 +47,9 @@ class GoodsDetail(DetailView):
         return context
 
 
-class GoodsCreate(CreateView):
+class GoodsCreate(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
     model = Goods
     template_name = "main/goods_create.html"
     form_class = GoodsCreateUpdateForm
@@ -94,7 +97,9 @@ class GoodsCreate(CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class GoodsUpdate(UpdateView):
+class GoodsUpdate(LoginRequiredMixin, UpdateView):
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
     model = Goods
     template_name = "main/goods_update.html"
     form_class = GoodsCreateUpdateForm

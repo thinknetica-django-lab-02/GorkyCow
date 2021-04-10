@@ -11,12 +11,12 @@ urlpatterns = [
     path("goods/<int:pk>/", views.GoodsDetail.as_view(), name="goods-detail"),
     path(
         "goods/create/",
-        login_required(views.GoodsCreate.as_view()),
+        views.GoodsCreate.as_view(),
         name="goods-create",
     ),
     path(
         "goods/edit/<int:pk>/",
-        login_required(views.GoodsUpdate.as_view()),
+        views.GoodsUpdate.as_view(),
         name="goods-edit",
     ),
     path(
