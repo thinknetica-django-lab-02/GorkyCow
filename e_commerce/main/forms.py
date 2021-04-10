@@ -23,7 +23,7 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ("phone_number", "birth_date")
+        fields = ("phone_number", "birth_date", "avatar")
         labels = {
             "phone_number": "Телефон",
             "birth_date": "Дата рождения",
@@ -37,6 +37,7 @@ class GoodsCreateUpdateForm(forms.ModelForm):
     class Meta:
         model = Goods
         fields = (
+            "image",
             "name",
             "description",
             "weight",
@@ -87,6 +88,7 @@ class ProfileFormSet(
         fields=(
             "phone_number",
             "birth_date",
+            "avatar",
         ),
         can_delete=False,
         labels={

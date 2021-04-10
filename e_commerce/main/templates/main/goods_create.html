@@ -1,9 +1,9 @@
 {% extends "main/base.html" %}
 
-{% block page_title_header %}<title>Каталог</title>{% endblock %}
+{% block page_title_header %}<title>Добавление товара</title>{% endblock %}
 
 {% block header %}
-    {% include 'main/header.html' with user=user %}
+        {% include 'main/header.html' with user=user avatar=avatar %}
 {% endblock %}
 
 {% block content %}
@@ -12,8 +12,10 @@
     <h2>Добавление товара</h2>
     <p class="lead">Создайте новый товар в нашем магазине</p>
 </div>
-<form class="" novalidate="" method="post">
+<form class="" novalidate="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    {% load static %}
+    {% load sorl_thumbnail %}
     {% load main_extras %}
     <div class="mb-3">
         {% for field in form %}
@@ -39,6 +41,13 @@
                 {% else %}
                     {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-100' }}
                 {% endif %}
+            {% else %}
+                {% thumbnail goods.image "x148" crop="center" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                {% endthumbnail %}
+                <hr class="mb-4">
+                {{ field.label_tag }}
+                {{ field|addclass:'form-control-file' }}
             {% endif %}
         {% endfor %}
     </div>

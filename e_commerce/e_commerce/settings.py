@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.flatpages",
     "main",
     "ckeditor",
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -104,6 +105,17 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+#memcache
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
+THUMBNAIL_PREFIX = 'cache/'
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -125,3 +137,7 @@ SITE_ID = 1
 STATIC_URL = "/static/"
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, "static")
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

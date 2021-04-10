@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from sorl.thumbnail import ImageField
 
 
 class Seller(models.Model):
@@ -69,6 +70,7 @@ class Goods(models.Model):
     rating = models.FloatField(default=5.0)
     price = models.FloatField(default=0)
     discount = models.FloatField(default=0, null=False)
+    image = ImageField(upload_to="goods/", verbose_name="Фото", blank=True)
 
     class Meta:
         ordering = ["name"]
@@ -79,7 +81,8 @@ class Goods(models.Model):
     def __repr__(self):
         return (
             f"Goods(name='{self.name}', description='{self.description}', seller={self.seller}, weight={self.weight}, "
-            + f"category={self.category}, manufacturer='{self.manufacturer}', tags={self.tags.all()}, size='{self.size}', rating={self.rating}, price={self.price})"
+            + f"category={self.category}, manufacturer='{self.manufacturer}', tags={self.tags.all()}, size='{self.size}', rating={self.rating}, price={self.price}, "
+            + f"image={self.image or None})"
         )
 
 
@@ -98,6 +101,7 @@ class Profile(models.Model):
     )
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    avatar = ImageField(upload_to="user_profile/", verbose_name="Аватар", blank=True)
 
     def get_absolute_url(self):
         return reverse("profile", kwargs={"pk": self.pk})

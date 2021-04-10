@@ -3,7 +3,7 @@
 {% block page_title_header %}<title>Редактирование профиля</title>{% endblock %}
 
 {% block header %}
-    {% include 'main/header.html' with user=user %}
+        {% include 'main/header.html' with user=user avatar=avatar %}
 {% endblock %}
 
 {% block content %}
@@ -11,10 +11,18 @@
     <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
     <h2>Редактирование профиля</h2>
     <p class="lead">Расскажите нам о себе</p>
-  </div>
-<form class="" novalidate="" method="post">
+</div>
+<form class="" novalidate="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    {% load static %}
+    {% load sorl_thumbnail %}
     {% load main_extras %}
+    {% if avatar %}
+        {% thumbnail avatar "200x200" crop="center" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+        {% endthumbnail %}
+        <hr class="mb-4">
+    {% endif %}
     <div class="row">
         {% for field in user_form %}
             {% if "name" in field.name %}
@@ -58,7 +66,15 @@
     {{ profile_form_set.management_form }}
     {% for form in profile_form_set %}
     <div class="row">
+        {{ form.media }}
         {% for field in form %}
+            {% if "avatar" in field.name %}
+                <div class="mb-3">
+                
+                {{ field.label_tag }}
+                {{ field|addclass:'form-control-file' }}
+                </div>
+            {% endif %}
             {% if "phone_number" in field.name %}
                 <div class="col-md-6 mb-3">
                     {% if field.errors %}
