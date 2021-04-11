@@ -24,9 +24,6 @@ urlpatterns = [
         login_required(views.ProfileUpdate.as_view()),
         name="profile",
     ),
-    #path("accounts/register", views.RegisterUser.as_view(), name="register"),
-    #path("accounts/login", views.LoginUser.as_view(), name="login"),
-    #path("accounts/logout", views.logout_user, name="logout"),
     path("accounts/", include("allauth.urls")),
 ]
 

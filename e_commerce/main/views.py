@@ -214,8 +214,3 @@ def index(request):
             "avatar": avatar,
         },
     )
-
-
-def logout_user(request):
-    logout(request)
-    return redirect("index")
