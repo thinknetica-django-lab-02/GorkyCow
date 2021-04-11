@@ -131,3 +131,5 @@ dmypy.json
 # Other
 idea
 static/
+media/
+cache/

@@ -5,7 +5,7 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
 
 from main.forms import GoodsCreateUpdateForm, ProfileFormSet, UserForm
-from main.models import Goods, Seller, Tag, User
+from main.models import Goods, Seller, Tag, User, Profile
 
 
 class GoodsList(ListView):
@@ -17,6 +17,10 @@ class GoodsList(ListView):
         context = super().get_context_data(**kwargs)
         context["tag_list"] = Tag.objects.all()
         context["tag"] = self.request.GET.get("tag")
+        if self.request.user.is_authenticated:
+            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
+        else: 
+            context["avatar"] = None
         return context
 
     def get_queryset(self):
@@ -32,6 +36,14 @@ class GoodsDetail(DetailView):
     queryset = Goods.objects.all()
     context_object_name = "goods"
     # TODO: Приделать кнопку редактирования в шаблоне, которая отображается если у пользователя есть права на редактирование товара (если он продавец)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
+        else: 
+            context["avatar"] = None
+        return context
 
 
 class GoodsCreate(CreateView):
@@ -57,6 +69,10 @@ class GoodsCreate(CreateView):
         )
         context["filds_for_custom_select"] = ("tags", "size", "category")
         context["form"] = kwargs.get("form")
+        if self.request.user.is_authenticated:
+            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
+        else: 
+            context["avatar"] = None
         return context
 
     def post(self, request, *args, **kwargs):
@@ -101,11 +117,15 @@ class GoodsUpdate(UpdateView):
         )
         context["filds_for_custom_select"] = ("tags", "size", "category")
         context["form"] = kwargs.get("form")
+        if self.request.user.is_authenticated:
+            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
+        else: 
+            context["avatar"] = None
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.get_form().is_valid():
+        if self.get_form():
             return self.form_valid(self.get_form())
         else:
             return self.form_invalid(self.get_form())
@@ -136,6 +156,7 @@ class ProfileUpdate(UpdateView):
             kwargs["profile_form_set"] = ProfileFormSet(instance=self.object)
         context["user_form"] = kwargs.get("user_form")
         context["profile_form_set"] = kwargs.get("profile_form_set")
+        context["avatar"] = Profile.objects.get(user=self.object).avatar
         return context
 
     def get(self, request, *args, **kwargs):
@@ -173,6 +194,10 @@ class ProfileUpdate(UpdateView):
 def index(request):
     turn_on_block = True
     text_for_filter = "Братухе подари на днюху черный орфографический словарь"
+    if request.user.is_authenticated:
+        avatar = Profile.objects.get(user=request.user).avatar
+    else: 
+        avatar = None
     return render(
         request,
         "main/index.html",
@@ -180,5 +205,6 @@ def index(request):
             "turn_on_block": turn_on_block,
             "user": request.user,
             "text_for_filter": text_for_filter,
+            "avatar": avatar,
         },
     )
