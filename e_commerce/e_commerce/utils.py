@@ -8,4 +8,5 @@ def load_secrets(file_name):
         config = yaml.safe_load(config_file).get("secrets")
     return config
 
-#TODO: сделать валидацию полей файла секретов
+
+# TODO: сделать валидацию полей файла секретов

@@ -1,8 +1,8 @@
-from django.contrib.auth import logout
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
 
@@ -37,7 +37,6 @@ class GoodsList(ListView):
 class GoodsDetail(DetailView):
     queryset = Goods.objects.all()
     context_object_name = "goods"
-    # TODO: Приделать кнопку редактирования в шаблоне, которая отображается если у пользователя есть права на редактирование товара (если он продавец)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -48,15 +47,16 @@ class GoodsDetail(DetailView):
         return context
 
 
-class GoodsCreate(LoginRequiredMixin, CreateView):
-    login_url = "accounts/login/"
+class GoodsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = "main.add_goods"
+    login_url = reverse_lazy("account_login")
     redirect_field_name = "redirect_to"
     model = Goods
     template_name = "main/goods_create.html"
     form_class = GoodsCreateUpdateForm
 
     def get_success_url(self):
-        self.success_url = reverse("goods-detail", kwargs={"pk": self.object.pk})
+        self.success_url = reverse_lazy("goods-detail", kwargs={"pk": self.object.pk})
         return self.success_url
 
     def get_context_data(self, **kwargs):
@@ -98,15 +98,16 @@ class GoodsCreate(LoginRequiredMixin, CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class GoodsUpdate(LoginRequiredMixin, UpdateView):
-    login_url = "accounts/login/"
+class GoodsUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = "main.change_goods"
+    login_url = reverse_lazy("account_login")
     redirect_field_name = "redirect_to"
     model = Goods
     template_name = "main/goods_update.html"
     form_class = GoodsCreateUpdateForm
 
     def get_success_url(self):
-        self.success_url = reverse("goods-detail", kwargs={"pk": self.object.pk})
+        self.success_url = reverse_lazy("goods-detail", kwargs={"pk": self.object.pk})
         return self.success_url
 
     def get_context_data(self, **kwargs):
@@ -144,14 +145,16 @@ class GoodsUpdate(LoginRequiredMixin, UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class ProfileUpdate(UpdateView):
+class ProfileUpdate(LoginRequiredMixin, UpdateView):
+    login_url = reverse_lazy("account_login")
+    redirect_field_name = "redirect_to"
     model = User
     form_class = UserForm
     template_name = "main/profile_update.html"
     context_object_name = "profile"
 
     def get_success_url(self):
-        self.success_url = reverse("profile", kwargs={"pk": self.request.user.pk})
+        self.success_url = reverse_lazy("profile", kwargs={"pk": self.request.user.pk})
         return self.success_url
 
     def get_context_data(self, **kwargs):

@@ -1,3 +1,5 @@
+from django.contrib.auth.models import Group, Permission, User
+
 from main.models import Category, Goods, Profile, Seller, Tag
 
 cat = Category(name="Toys")
@@ -59,3 +61,8 @@ goods_with_low_price = Goods.objects.filter(price__gte=10)
 # Get all software
 
 Software_goods = Goods.objects.filter(category=Soft)
+
+sellers_group, created_grp = Group.objects.get_or_create(name="sellers")
+add_goods = Permission.objects.get(name="Can add goods")
+change_goods = Permission.objects.get(name="Can change goods")
+sellers_group.permissions.add(add_goods, change_goods)
