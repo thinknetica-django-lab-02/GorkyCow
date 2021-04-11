@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+from e_commerce.utils import load_secrets
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,7 +43,11 @@ INSTALLED_APPS = [
     "django.contrib.flatpages",
     "main",
     "ckeditor",
-    'sorl.thumbnail',
+    "sorl.thumbnail",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
 
 MIDDLEWARE = [
@@ -86,6 +92,33 @@ DATABASES = {
 }
 
 
+# AUTHENTICATION
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+secrets = load_secrets("secrets.yml")
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": secrets["google"]["client_id"], 
+            "secret": secrets["google"]["secret"], 
+            "key": ""
+        },
+        "AUTH_PARAMS": {
+            "access_type": "offline",
+        }
+    }
+}
+
+LOGIN_REDIRECT_URL = "index"
+ACCOUNT_LOGOUT_REDIRECT_URL ="/accounts/login/"
+ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -104,17 +137,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#Email sending
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-#memcache
+# memcache
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-        'LOCATION': '127.0.0.1:11211',
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyLibMCCache",
+        "LOCATION": "127.0.0.1:11211",
     }
 }
 
-THUMBNAIL_PREFIX = 'cache/'
+THUMBNAIL_PREFIX = "cache/"
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -139,5 +174,5 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, "static")
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"

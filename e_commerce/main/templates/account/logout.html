@@ -1,0 +1,22 @@
+{% extends "main/base.html" %}
+
+{% block page_title_header %}<title>Вход</title>{% endblock %}
+
+{% block header %}
+    {% include 'main/header.html' with user=user avatar=avatar %}
+{% endblock %}
+
+{% block content %}
+    {% load static %}
+    <form class="form-signin" method="POST" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <div class="py-5 text-center">
+            <img class="mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Уверены, что хотите покинуть сайт?</h1>
+        </div>
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Выйти</button>
+    </form>
+{% endblock %}

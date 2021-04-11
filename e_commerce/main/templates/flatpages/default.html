@@ -7,9 +7,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="py-5 text-center">
-    <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-    <h2>{{ flatpage.title }}</h2>
-</div>
+<main role="main" class="container">
+  <div class="starter-template">
+    <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h2>{{ flatpage.title }}</h2>
+    </div>
     {{ flatpage.content }}
+  </div>
+</main>
 {% endblock %}

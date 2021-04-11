@@ -7,18 +7,22 @@ import sorl.thumbnail.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0010_auto_20210409_1209'),
+        ("main", "0010_auto_20210409_1209"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='goods',
-            name='image',
-            field=sorl.thumbnail.fields.ImageField(blank=True, upload_to='media/goods/', verbose_name='Фото'),
+            model_name="goods",
+            name="image",
+            field=sorl.thumbnail.fields.ImageField(
+                blank=True, upload_to="media/goods/", verbose_name="Фото"
+            ),
         ),
         migrations.AddField(
-            model_name='profile',
-            name='image',
-            field=sorl.thumbnail.fields.ImageField(blank=True, upload_to='media/user_profile/', verbose_name='Аватар'),
+            model_name="profile",
+            name="image",
+            field=sorl.thumbnail.fields.ImageField(
+                blank=True, upload_to="media/user_profile/", verbose_name="Аватар"
+            ),
         ),
     ]

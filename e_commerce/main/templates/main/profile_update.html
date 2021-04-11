@@ -7,107 +7,111 @@
 {% endblock %}
 
 {% block content %}
-<div class="py-5 text-center">
-    <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-    <h2>Редактирование профиля</h2>
-    <p class="lead">Расскажите нам о себе</p>
-</div>
-<form class="" novalidate="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% load static %}
-    {% load sorl_thumbnail %}
-    {% load main_extras %}
-    {% if avatar %}
-        {% thumbnail avatar "200x200" crop="center" as im %}
-            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
-        {% endthumbnail %}
-        <hr class="mb-4">
-    {% endif %}
-    <div class="row">
-        {% for field in user_form %}
-            {% if "name" in field.name %}
-                <div class="col-md-6 mb-3">
-                    {% if field.errors %}
-                        {{ field.label_tag }} {{ field|addclass:'form-control is-invalid' }}
-                        <div class="invalid-feedback">
-                            {% for error in field.errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ field.label_tag }} {{ field|addclass:'form-control' }}
-                    {% endif %}
-                </div>
+<main role="main" class="container">
+    <div class="starter-template">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+            <h2>Редактирование профиля</h2>
+            <p class="lead">Расскажите нам о себе</p>
+        </div>
+        <form class="" novalidate="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% load static %}
+            {% load sorl_thumbnail %}
+            {% load main_extras %}
+            {% if avatar %}
+                {% thumbnail avatar "200x200" crop="center" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+                {% endthumbnail %}
+                <hr class="mb-4">
             {% endif %}
-        {% endfor %}
-    </div>
-    
-    {% for field in user_form %}
-        {% if not "name" in field.name %}
-            <div class="mb-3">
-                {% if field.errors %}
-                    {{ field.label_tag }} {{ field|addclass:'form-control is-invalid' }}
-                    <div class="invalid-feedback">
-                        {% for error in field.errors %}
-                            {{ error }}
-                        {% endfor %}
+            <div class="row">
+                {% for field in user_form %}
+                    {% if "name" in field.name %}
+                        <div class="col-md-6 mb-3">
+                            {% if field.errors %}
+                                {{ field.label_tag }} {{ field|addclass:'form-control is-invalid' }}
+                                <div class="invalid-feedback">
+                                    {% for error in field.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ field.label_tag }} {{ field|addclass:'form-control' }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            {% for field in user_form %}
+                {% if not "name" in field.name %}
+                    <div class="mb-3">
+                        {% if field.errors %}
+                            {{ field.label_tag }} {{ field|addclass:'form-control is-invalid' }}
+                            <div class="invalid-feedback">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ field.label_tag }} {{ field|addclass:'form-control' }}
+                        {% endif %}
                     </div>
-                {% else %}
-                    {{ field.label_tag }} {{ field|addclass:'form-control' }}
+                    <div class="invalid-feedback">
+                        Поле {{ field.label_tag }} не валидно
+                    </div>
                 {% endif %}
-            </div>
-            <div class="invalid-feedback">
-                Поле {{ field.label_tag }} не валидно
-            </div>
-        {% endif %}
-    {% endfor %}
-    <hr class="mb-4">
+            {% endfor %}
+            <hr class="mb-4">
 
-    {{ profile_form_set.management_form }}
-    {% for form in profile_form_set %}
-    <div class="row">
-        {{ form.media }}
-        {% for field in form %}
-            {% if "avatar" in field.name %}
-                <div class="mb-3">
-                
-                {{ field.label_tag }}
-                {{ field|addclass:'form-control-file' }}
-                </div>
-            {% endif %}
-            {% if "phone_number" in field.name %}
-                <div class="col-md-6 mb-3">
-                    {% if field.errors %}
-                        {{ field.label_tag }} {{ field|addclass:'form-control is-invalid' }}
-                        <div class="invalid-feedback">
-                            {% for error in field.errors %}
-                                {{ error }}
-                            {% endfor %}
+            {{ profile_form_set.management_form }}
+            {% for form in profile_form_set %}
+            <div class="row">
+                {{ form.media }}
+                {% for field in form %}
+                    {% if "avatar" in field.name %}
+                        <div class="mb-3">
+                        
+                        {{ field.label_tag }}
+                        {{ field|addclass:'form-control-file' }}
                         </div>
-                    {% else %}
-                        {{ field.label_tag }} {{ field|addclass:'form-control' }}
                     {% endif %}
-                </div>
-                
-            {% elif "birth_date" in field.name %}
-                <div class="col-md-6 mb-3">
-                    {% if field.errors %}
-                        {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-50 is-invalid' }}
-                        <div class="invalid-feedback">
-                            {% for error in field.errors %}
-                                {{ error }}
-                            {% endfor %}
+                    {% if "phone_number" in field.name %}
+                        <div class="col-md-6 mb-3">
+                            {% if field.errors %}
+                                {{ field.label_tag }} {{ field|addclass:'form-control is-invalid' }}
+                                <div class="invalid-feedback">
+                                    {% for error in field.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ field.label_tag }} {{ field|addclass:'form-control' }}
+                            {% endif %}
                         </div>
-                    {% else %}
-                        {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-50' }}
+                        
+                    {% elif "birth_date" in field.name %}
+                        <div class="col-md-6 mb-3">
+                            {% if field.errors %}
+                                {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-50 is-invalid' }}
+                                <div class="invalid-feedback">
+                                    {% for error in field.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-50' }}
+                            {% endif %}
+                        </div>
+                        
                     {% endif %}
-                </div>
-                
-            {% endif %}
-        {% endfor %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit" value="Update">Сохранить</button>
+        </form>
     </div>
-    {% endfor %}
-    <hr class="mb-4">
-    <button class="btn btn-primary btn-lg btn-block" type="submit" value="Update">Сохранить</button>
-  </form>
+</main>
 {% endblock %}

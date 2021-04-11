@@ -7,6 +7,8 @@
 {% endblock %}
 
 {% block content %}
+<main role="main" class="container">
+  <div class="starter-template">
     {% csrf_token %}
     {% load static %}
     {% load sorl_thumbnail %}
@@ -35,4 +37,6 @@
           </div>
         </div>
       </div>
+  </div>
+</main>
 {% endblock %}

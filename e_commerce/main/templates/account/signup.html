@@ -1,0 +1,42 @@
+{% extends "main/base.html" %}
+
+{% block page_title_header %}<title>Вход</title>{% endblock %}
+
+{% block header %}
+    {% include 'main/header.html' with user=user avatar=avatar %}
+{% endblock %}
+
+{% block content %}
+    {% load i18n %}
+    {% load account socialaccount %}
+    {% get_providers as socialaccount_providers %}
+    {% load static %}
+    <form class="form-signin" id="signup_form" method="POST" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        <div class="py-5 text-center">
+            <img class="mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Пожалуйста, зарегистрируйтесь</h1>
+        </div>
+        <label for="id_email" class="sr-only">Email:</label>
+        <input type="email" class="form-control" name="email" placeholder="E-mail" autocomplete="email" required="" id="id_email">
+        <label for="id_username" class="sr-only">Имя пользователя:</label>
+        <input type="text" class="form-control" name="username" placeholder="Имя пользователя" autocomplete="username" minlength="1" maxlength="150" required="" id="id_username">
+        <label for="id_password1" class="sr-only">Пароль</label>
+        <input type="password" class="form-control" name="password1" placeholder="Пароль" autocomplete="new-password" required="" id="id_password1">
+        <label for="id_password2" class="sr-only">Еще разок</label>
+        <input type="password" class="form-control" name="password2" placeholder="Еще разок" autocomplete="new-password" required="" id="id_password2">
+        
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+    </form>
+    <div class="d-flex align-items-center justify-content-center">
+        <p class="lead">Уже есть аккаунт? <a href="{{ login_url }}">Войдите!</a></p>
+    </div>
+    {% if form.errors %}
+        <div class="d-flex align-items-center justify-content-center">
+            {{ form.errors }}
+        </div>
+    {% endif %}
+{% endblock %}

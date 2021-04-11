@@ -1,0 +1,52 @@
+{% extends "main/base.html" %}
+
+{% block page_title_header %}<title>Вход</title>{% endblock %}
+
+{% block header %}
+    {% include 'main/header.html' with user=user avatar=avatar %}
+{% endblock %}
+
+{% block content %}
+    {% load i18n %}
+    {% load account socialaccount %}
+    {% get_providers as socialaccount_providers %}
+    {% load static %}
+    <form class="form-signin" method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        <div class="py-5 text-center">
+            <img class="mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Пожалуйста, войдите</h1>
+        </div>
+        <label for="id_login" class="sr-only">Email или имя пользователя</label>
+        <input type="text" id="id_login" class="form-control" placeholder="Email или имя пользователя" required="" autofocus="" name="login" autocomplete="email" maxlength="150">
+        <label for="id_password" class="sr-only">Пароль</label>
+        <input type="password" class="form-control" name="password" placeholder="Пароль" autocomplete="current-password" required="" id="id_password">
+        <div class="checkbox mb-3">
+            <label>
+            <input type="checkbox" value="remember-me" name="remember" id="id_remember"> Запомнить меня
+            </label>
+        </div>
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+    </form>
+    <div class="d-flex align-items-center justify-content-center">
+        <p class="lead">Все ещё нет аккаунта? <a href="{{ signup_url }}">Зарегистрируйтесь!</a></p>
+    </div>
+    <div class="d-flex align-items-center justify-content-center">
+        <p class="lead">Или войдите с помощью:</p>
+    </div>
+    <div class="d-flex align-items-center justify-content-center">
+        {% if socialaccount_providers %}
+        <div class="socialaccount_ballot">
+              {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </div>
+        {% endif %} 
+    </div>
+    {% if form.errors %}
+        <div class="d-flex align-items-center justify-content-center">
+            {{ form.errors }}
+        </div>
+{% endif %}
+{% endblock %}

@@ -27,11 +27,12 @@
           <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.get_username }}</a>
           <div class="dropdown-menu" aria-labelledby="dropdown02">
             <a class="dropdown-item" href="{% url 'profile' user.pk %}">Личный кабинет</a>
+            <a class="dropdown-item" href="{% url 'account_logout' %}">Выйти</a>
           </div>
         </li>
         {% else %}
         <li class="nav-item active">
-          <a class="nav-link" href="#">Войти</a>
+          <a class="nav-link" href="{% url 'account_login' %}">Войти</a>
         </li>
         {% endif %}
         <li class="nav-item dropdown">
