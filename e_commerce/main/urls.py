@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.decorators import login_required
 from django.urls import include, path
 
 from . import views
@@ -21,7 +20,7 @@ urlpatterns = [
     ),
     path(
         "accounts/profile/<int:pk>/",
-        login_required(views.ProfileUpdate.as_view()),
+        views.ProfileUpdate.as_view(),
         name="profile",
     ),
     path("accounts/", include("allauth.urls")),

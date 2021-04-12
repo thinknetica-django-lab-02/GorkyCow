@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group, User
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models.signals import post_save
@@ -109,7 +109,9 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
-            common_users_group, created_grp = Group.objects.get_or_create(name='common_users')
+            common_users_group, created_grp = Group.objects.get_or_create(
+                name="common_users"
+            )
             instance.groups.add(common_users_group)
             Profile.objects.create(user=instance)
 
