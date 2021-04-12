@@ -104,19 +104,19 @@ secrets = load_secrets("secrets.yml")
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APP": {
-            "client_id": secrets["google"]["client_id"], 
-            "secret": secrets["google"]["secret"], 
-            "key": ""
+            "client_id": secrets["google"]["client_id"],
+            "secret": secrets["google"]["secret"],
+            "key": "",
         },
         "AUTH_PARAMS": {
             "access_type": "offline",
-        }
+        },
     }
 }
 
 LOGIN_REDIRECT_URL = "index"
-ACCOUNT_LOGOUT_REDIRECT_URL ="/accounts/login/"
-ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_LOGOUT_REDIRECT_URL = "/accounts/login/"
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 
 # Password validation
@@ -137,8 +137,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#Email sending
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Email sending
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # memcache
 

@@ -1,13 +1,13 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from main.forms import GoodsCreateUpdateForm, ProfileFormSet, UserForm
-from main.models import Goods, Seller, Tag, User, Profile
+from main.models import Goods, Profile, Seller, Tag, User
 
 
 class GoodsList(ListView):
