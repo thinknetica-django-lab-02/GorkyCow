@@ -133,3 +133,4 @@ idea
 static/
 media/
 cache/
+secrets.yml

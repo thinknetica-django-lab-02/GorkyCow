@@ -7,51 +7,55 @@
 {% endblock %}
 
 {% block content %}
-<div class="py-5 text-center">
-    <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-    <h2>Добавление товара</h2>
-    <p class="lead">Создайте новый товар в нашем магазине</p>
+<main role="main" class="container">
+    <div class="starter-template">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+            <h2>Добавление товара</h2>
+            <p class="lead">Создайте новый товар в нашем магазине</p>
+        </div>
+        <form class="" novalidate="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% load static %}
+            {% load sorl_thumbnail %}
+            {% load main_extras %}
+            <div class="mb-3">
+                {% for field in form %}
+                    {% if field.name in filds_for_form_control %}
+                        {% if field.errors %}
+                            {{ field.label_tag }} {{ field|addclass:'form-control is-invalid' }}
+                            <div class="invalid-feedback">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ field.label_tag }} {{ field|addclass:'form-control' }}
+                        {% endif %}
+                    {% elif field.name in filds_for_custom_select %}
+                        {% if field.errors %}
+                            {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-100 is-invalid' }}
+                            <div class="invalid-feedback">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-100' }}
+                        {% endif %}
+                    {% else %}
+                        {% thumbnail goods.image "x148" crop="center" as im %}
+                            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                        {% endthumbnail %}
+                        <hr class="mb-4">
+                        {{ field.label_tag }}
+                        {{ field|addclass:'form-control-file' }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit" value="Update">Сохранить</button>
+        </form>
 </div>
-<form class="" novalidate="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% load static %}
-    {% load sorl_thumbnail %}
-    {% load main_extras %}
-    <div class="mb-3">
-        {% for field in form %}
-            {% if field.name in filds_for_form_control %}
-                {% if field.errors %}
-                    {{ field.label_tag }} {{ field|addclass:'form-control is-invalid' }}
-                    <div class="invalid-feedback">
-                        {% for error in field.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ field.label_tag }} {{ field|addclass:'form-control' }}
-                {% endif %}
-            {% elif field.name in filds_for_custom_select %}
-                {% if field.errors %}
-                    {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-100 is-invalid' }}
-                    <div class="invalid-feedback">
-                        {% for error in field.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-100' }}
-                {% endif %}
-            {% else %}
-                {% thumbnail goods.image "x148" crop="center" as im %}
-                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                {% endthumbnail %}
-                <hr class="mb-4">
-                {{ field.label_tag }}
-                {{ field|addclass:'form-control-file' }}
-            {% endif %}
-        {% endfor %}
-    </div>
-    <hr class="mb-4">
-    <button class="btn btn-primary btn-lg btn-block" type="submit" value="Update">Сохранить</button>
-</form>
+</main>
 {% endblock %}

@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.contrib.auth import logout
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -20,7 +21,7 @@ class GoodsList(ListView):
         context["tag"] = self.request.GET.get("tag")
         if self.request.user.is_authenticated:
             context["avatar"] = Profile.objects.get(user=self.request.user).avatar
-        else: 
+        else:
             context["avatar"] = None
         return context
 
@@ -42,14 +43,14 @@ class GoodsDetail(DetailView):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             context["avatar"] = Profile.objects.get(user=self.request.user).avatar
-        else: 
+        else:
             context["avatar"] = None
         return context
 
 
 class GoodsCreate(LoginRequiredMixin, CreateView):
-    login_url = '/login/'
-    redirect_field_name = 'redirect_to'
+    login_url = "accounts/login/"
+    redirect_field_name = "redirect_to"
     model = Goods
     template_name = "main/goods_create.html"
     form_class = GoodsCreateUpdateForm
@@ -74,7 +75,7 @@ class GoodsCreate(LoginRequiredMixin, CreateView):
         context["form"] = kwargs.get("form")
         if self.request.user.is_authenticated:
             context["avatar"] = Profile.objects.get(user=self.request.user).avatar
-        else: 
+        else:
             context["avatar"] = None
         return context
 
@@ -98,8 +99,8 @@ class GoodsCreate(LoginRequiredMixin, CreateView):
 
 
 class GoodsUpdate(LoginRequiredMixin, UpdateView):
-    login_url = '/login/'
-    redirect_field_name = 'redirect_to'
+    login_url = "accounts/login/"
+    redirect_field_name = "redirect_to"
     model = Goods
     template_name = "main/goods_update.html"
     form_class = GoodsCreateUpdateForm
@@ -124,7 +125,7 @@ class GoodsUpdate(LoginRequiredMixin, UpdateView):
         context["form"] = kwargs.get("form")
         if self.request.user.is_authenticated:
             context["avatar"] = Profile.objects.get(user=self.request.user).avatar
-        else: 
+        else:
             context["avatar"] = None
         return context
 
@@ -201,7 +202,7 @@ def index(request):
     text_for_filter = "Братухе подари на днюху черный орфографический словарь"
     if request.user.is_authenticated:
         avatar = Profile.objects.get(user=request.user).avatar
-    else: 
+    else:
         avatar = None
     return render(
         request,
