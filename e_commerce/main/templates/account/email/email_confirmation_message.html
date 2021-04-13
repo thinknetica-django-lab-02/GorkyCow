@@ -55,12 +55,25 @@
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p40t es-p10b">
-                                                                                        <h1 style="color: #ffffff;">WELCOME {{ user_name|upper }}</h1>
+                                                                                        <h1 style="color: #ffffff;">CONFIRM EMAIL ADDRESS</h1>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td esdev-links-color="#757575" class="esd-block-text es-p10t es-p20b es-p30r es-p30l" align="center">
-                                                                                        <p style="color: #757575;">We are so glad you came here.</p>
+                                                                                        <p style="color: #757575;">
+
+                                                                                        {% load account %}
+                                                                                        {% load i18n %}
+
+                                                                                        {% block content %}
+                                                                                        {% autoescape off %}
+                                                                                        <p>{% user_display user as user_display %}</p>
+                                                                                            <p>You're receiving this e-mail because user {{ user_display }} has given your e-mail address to register an account on {{ current_site.domain }}.</p>
+                                                                                            <p>To confirm this is correct, go to {{ activate_url }}</p>
+                                                                                        {% endautoescape %}
+                                                                                        {% endblock %}
+
+                                                                                        </p>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
