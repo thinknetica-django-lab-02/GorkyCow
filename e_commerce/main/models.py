@@ -6,6 +6,8 @@ from django.dispatch import receiver
 from django.urls import reverse
 from sorl.thumbnail import ImageField
 
+from main.messages import send_welcome_email
+
 
 class Seller(models.Model):
     STATUSES = (
@@ -114,6 +116,7 @@ class Profile(models.Model):
             )
             instance.groups.add(common_users_group)
             Profile.objects.create(user=instance)
+            send_welcome_email(instance)
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
