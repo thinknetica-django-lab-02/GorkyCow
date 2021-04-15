@@ -174,9 +174,9 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         self.object = User.objects.get(id=request.user.pk)
-        user_form = UserForm(request.POST, instance=request.user)
+        user_form = UserForm(request.POST, instance=self.object)
         profile_form_set = ProfileFormSet(
-            request.POST, request.FILES, instance=request.user.profile
+            request.POST, request.FILES, instance=self.object
         )
         if profile_form_set.is_valid() and user_form.is_valid():
             return self.form_valid(user_form, profile_form_set)
@@ -190,6 +190,7 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
             temp_profile = form.save(commit=False)
             temp_profile.user = self.object
             temp_profile.save()
+        profile_form_set.save()
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, user_form, profile_form_set):

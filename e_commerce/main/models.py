@@ -6,7 +6,8 @@ from django.dispatch import receiver
 from django.urls import reverse
 from sorl.thumbnail import ImageField
 
-from main.messages import send_welcome_email
+from main.messages import (new_goods_subscribers_notification,
+                           send_welcome_email)
 
 
 class Seller(models.Model):
@@ -88,14 +89,27 @@ class Goods(models.Model):
         )
 
 
+class Subscriptions(models.Model):
+    name = models.CharField(max_length=80)
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return f"Subscriptions(name='{self.name}')"
+
+    @receiver(post_save, sender=Goods)
+    def goods_add_routine(sender, instance, created, **kwargs):
+        if created:
+            subscription = Subscriptions.objects.get(name="New goods")
+            for profile in Profile.objects.filter(subsciber=subscription):
+                new_goods_subscribers_notification(instance, profile)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(
         User,
-        auto_created=True,
         on_delete=models.CASCADE,
-        parent_link=True,
-        primary_key=True,
-        serialize=False,
     )
     phone_regex = RegexValidator(
         regex=r"^\+?1?\d{9,15}$",
@@ -104,6 +118,9 @@ class Profile(models.Model):
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     avatar = ImageField(upload_to="user_profile/", verbose_name="Аватар", blank=True)
+    subsciber = models.ManyToManyField(
+        Subscriptions, verbose_name="Подписки", blank=True
+    )
 
     def get_absolute_url(self):
         return reverse("profile", kwargs={"pk": self.pk})
@@ -122,8 +139,3 @@ class Profile(models.Model):
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
 
-    def __str__(self):
-        return self.user
-
-    def __repr__(self):
-        return f"Profile(user={self.user}, phone_number='{self.phone_number}', birth_date={self.birth_date}, avatar={self.avatar})"

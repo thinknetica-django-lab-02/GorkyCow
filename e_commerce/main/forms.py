@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, widgets
 from django.utils.translation import gettext as _
 
-from .models import Category, Goods, Profile, Tag, User
+from .models import Category, Goods, Profile, Subscriptions, Tag, User
 
 
 class UserForm(forms.ModelForm):
@@ -23,13 +23,19 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ("phone_number", "birth_date", "avatar")
+        fields = "__all__"
         labels = {
             "phone_number": "Телефон",
             "birth_date": "Дата рождения",
+            "subsciber": "Подписки",
         }
         widgets = {
-            "birth_date": forms.widgets.SelectDateWidget(),
+            "birth_date": forms.widgets.SelectDateWidget(
+                years=range(datetime.now().year - 100, datetime.now().year + 1)
+            ),
+            "subsciber": forms.widgets.SelectMultiple(
+                choices=Subscriptions.objects.all()
+            ),
         }
 
 
@@ -82,25 +88,7 @@ class GoodsCreateUpdateForm(forms.ModelForm):
 
 
 class ProfileFormSet(
-    inlineformset_factory(
-        User,
-        Profile,
-        fields=(
-            "phone_number",
-            "birth_date",
-            "avatar",
-        ),
-        can_delete=False,
-        labels={
-            "phone_number": "Телефон",
-            "birth_date": "Дата рождения",
-        },
-        widgets={
-            "birth_date": widgets.SelectDateWidget(
-                years=range(datetime.now().year - 100, datetime.now().year + 1)
-            ),
-        },
-    )
+    inlineformset_factory(User, Profile, form=ProfileForm, can_delete=False)
 ):
     def __init__(self, *args, **kwargs):
         self.__initial = kwargs.pop("initial", [])
@@ -114,8 +102,6 @@ class ProfileFormSet(
 
             if birth_date:
                 today = date.today()
-                # import pdb
-                # pdb.set_trace()
                 if (today - relativedelta(years=18)) < birth_date:
                     msg = "Доступ к сайту разрешён лицам старше 18 лет"
                     form.add_error("birth_date", msg)

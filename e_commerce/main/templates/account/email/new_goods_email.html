@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>{{ title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body style="margin: 0; padding: 0;">
+
+    <p>Привет, {{ user_name }}! </p>
+    <p>В Bomzhon появился новый товар.</p>
+
+    <p>{{ goods_name }}</p>
+    <p>{{ goods_description }}</p>
+    Подробности по  <a href="{% url 'goods-detail' goods_id %}">ссылке</a>
+</body>
+</html> 
