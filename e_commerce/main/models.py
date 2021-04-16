@@ -74,6 +74,7 @@ class Goods(models.Model):
     price = models.FloatField(default=0)
     discount = models.FloatField(default=0, null=False)
     image = ImageField(upload_to="goods/", verbose_name="Фото", blank=True)
+    creation_date = models.DateField(verbose_name="Дата создания")
 
     class Meta:
         ordering = ["name"]
@@ -138,4 +139,3 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
-

@@ -33,3 +33,20 @@ def new_goods_subscribers_notification(goods, profile):
     )
     msg.attach_alternative(html_message, "text/html")
     msg.send()
+
+
+def new_goods_subscribers_weekly_notification(goods, profile):
+    subject = "Новые товары в Bomzhon!"
+    ctx = {
+        "title": subject,
+        "user_name": profile.user.get_username(),
+        "new_goods": goods,
+    }
+    html_message = get_template("account/email/new_goods_email_weekly.html").render(ctx)
+    url = reverse_lazy("goods")
+    text_content = f"Привет, {profile.user.get_username()}! В Bomzhon появились новые товары. Подробности по ссылке: {url}"
+    msg = EmailMultiAlternatives(
+        subject, text_content, settings.DEFAULT_FROM_EMAIL, [profile.user.email]
+    )
+    msg.attach_alternative(html_message, "text/html")
+    msg.send()
