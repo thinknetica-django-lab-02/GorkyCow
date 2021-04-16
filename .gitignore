@@ -134,3 +134,4 @@ static/
 media/
 cache/
 secrets.yml
+redis-data/
