@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>{{ title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body style="margin: 0; padding: 0;">
+
+    <p>Привет, {{ user_name }}! </p>
+    <p>За прошедшую неделю в Bomzhon появились новый товары.</p>
+
+    {% for goods in new_goods %}
+        <p>{{ goods.name }}</p>
+        <p>{{ goods.description }}</p>
+        <a href="{% url 'goods-detail' goods.id %}">Подробнее</a>
+        <p>&nbsp;</p>
+    {% endfor %}
+</body>
+</html> 

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.http import HttpResponseRedirect
@@ -91,6 +93,7 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
         temp_goods.seller = Seller.objects.get(
             name="Bobbie's Bits"
         )  # TODO: заменить на юзера, когда будет готова авторизация для продавцов
+        temp_goods.creation_date = datetime.now()
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
 
