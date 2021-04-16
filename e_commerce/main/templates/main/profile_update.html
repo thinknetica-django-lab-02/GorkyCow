@@ -104,12 +104,27 @@
                                 {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-50' }}
                             {% endif %}
                         </div>
-                        
+                    {% elif "subsciber" in field.name %}
+                        <div class="col-md-6 mb-3">
+                            {% if field.errors %}
+                                {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-50 is-invalid' }}
+                                <div class="invalid-feedback">
+                                    {% for error in field.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ field.label_tag }} {{ field|addclass:'custom-select d-block w-50' }}
+                            {% endif %}
+                        </div>
                     {% endif %}
                 {% endfor %}
             </div>
-            {% endfor %}
             <hr class="mb-4">
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+            {% endfor %}
             <button class="btn btn-primary btn-lg btn-block" type="submit" value="Update">Сохранить</button>
         </form>
     </div>
