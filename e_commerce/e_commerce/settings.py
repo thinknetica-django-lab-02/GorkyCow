@@ -145,12 +145,15 @@ AUTH_PASSWORD_VALIDATORS = [
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "no-reply@bomzhon.com"
 
-# memcache
+# redis-cache
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.memcached.PyLibMCCache",
-        "LOCATION": "127.0.0.1:11211",
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
 
@@ -187,3 +190,7 @@ CELERY_TIMEZONE = "Europe/Moscow"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_CACHE_BACKEND = "default"
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
