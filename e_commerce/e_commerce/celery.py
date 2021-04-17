@@ -3,8 +3,6 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 
-# from main.tasks import send_weekly_new_goods_email_task
-
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "e_commerce.settings")
 
