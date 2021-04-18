@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, widgets
 from django.utils.translation import gettext as _
 
-from .models import Category, Goods, Profile, Subscriptions, Tag, User
+from .models import Category, Goods, Profile, Subscriptions, Tag, User, SMSLog
 
 
 class UserForm(forms.ModelForm):
@@ -110,3 +110,28 @@ class ProfileFormSet(
                         code="invalid",
                         params={"value": birth_date},
                     )
+
+
+class PhoneConfirmForm(forms.Form):
+    code = forms.IntegerField()
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
+        super(PhoneConfirmForm, self).__init__(*args, **kwargs)
+
+    def clean_code(self):
+        #from pdb import set_trace
+        #set_trace()
+        sms_log = SMSLog.objects.filter(user=self.request.user).order_by("creation_date").last()
+        code = self.cleaned_data["code"]
+        if code != sms_log.code:
+            raise ValidationError(
+                _("Введён неверный код: %(value)s"),
+                code="invalid",
+                params={"value": code},
+            )
+        else:
+            profile = Profile.objects.get(user=self.request.user)
+            profile.is_phone_confirmed = True
+            profile.save()
+        return code

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.urls import reverse_lazy
+from twilio.rest import Client
 
 
 def send_welcome_email(user):
@@ -50,3 +51,13 @@ def new_goods_subscribers_weekly_notification(goods, profile):
     )
     msg.attach_alternative(html_message, "text/html")
     msg.send()
+
+
+def send_sms_to_number(to_number, sms_text):
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOCKEN)
+    message = client.messages .create(
+                     body=sms_text,
+                     from_=settings.TWILIO_PHONE_NUMBER,
+                     to=to_number
+                 )
+    return message

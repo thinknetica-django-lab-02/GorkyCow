@@ -3,13 +3,14 @@ from datetime import datetime
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView, FormView
 from django.views.generic.edit import CreateView, UpdateView
 
-from main.forms import GoodsCreateUpdateForm, ProfileFormSet, UserForm
-from main.models import Goods, Profile, Seller, Tag, User
+from main.forms import GoodsCreateUpdateForm, ProfileFormSet, UserForm, PhoneConfirmForm
+from main.models import Goods, Profile, Seller, Tag, User, SMSLog
+from main.tasks import send_sms_verification_code
 
 
 class GoodsList(ListView):
@@ -202,6 +203,30 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
                 user_form=user_form, profile_form_set=profile_form_set
             )
         )
+
+
+class PhoneConfirmation(LoginRequiredMixin, FormView):
+    login_url = reverse_lazy("account_login")
+    redirect_field_name = "redirect_to"
+    form_class = PhoneConfirmForm
+    template_name = "main/phone_confirmation.html"
+    success_url = reverse_lazy("phone-confirmed")
+
+    def get_form_kwargs(self):
+        kw = super(PhoneConfirmation, self).get_form_kwargs()
+        kw["request"] = self.request
+        return kw
+
+    def get(self, request, *args, **kwargs):
+        if request.user.profile.is_phone_confirmed:
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            send_sms_verification_code(request.user.profile.id)
+            return self.render_to_response(self.get_context_data())
+
+
+class PhoneConfirmed(LoginRequiredMixin, TemplateView):
+    template_name = "main/phone_confirmed.html"
 
 
 def index(request):
