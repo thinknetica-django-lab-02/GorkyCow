@@ -4,8 +4,8 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
-from sorl.thumbnail import ImageField
 from picklefield.fields import PickledObjectField
+from sorl.thumbnail import ImageField
 
 from main.tasks import (send_new_goods_subscribers_notification_task,
                         send_welcome_email_task)
@@ -120,7 +120,9 @@ class Profile(models.Model):
         message="Телефонный номер должен быть в формате: '+999999999' и не длиннее 15 символов.",
     )
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
-    is_phone_confirmed = models.BooleanField(default=False, verbose_name="Телефон подтвержден")
+    is_phone_confirmed = models.BooleanField(
+        default=False, verbose_name="Телефон подтвержден"
+    )
     birth_date = models.DateField(null=True, blank=True)
     avatar = ImageField(upload_to="user_profile/", verbose_name="Аватар", blank=True)
     subsciber = models.ManyToManyField(

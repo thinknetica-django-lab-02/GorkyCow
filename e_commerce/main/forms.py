@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, widgets
 from django.utils.translation import gettext as _
 
-from .models import Category, Goods, Profile, Subscriptions, Tag, User, SMSLog
+from .models import Category, Goods, Profile, SMSLog, Subscriptions, Tag, User
 
 
 class UserForm(forms.ModelForm):
@@ -120,9 +120,13 @@ class PhoneConfirmForm(forms.Form):
         super(PhoneConfirmForm, self).__init__(*args, **kwargs)
 
     def clean_code(self):
-        #from pdb import set_trace
-        #set_trace()
-        sms_log = SMSLog.objects.filter(user=self.request.user).order_by("creation_date").last()
+        # from pdb import set_trace
+        # set_trace()
+        sms_log = (
+            SMSLog.objects.filter(user=self.request.user)
+            .order_by("creation_date")
+            .last()
+        )
         code = self.cleaned_data["code"]
         if code != sms_log.code:
             raise ValidationError(

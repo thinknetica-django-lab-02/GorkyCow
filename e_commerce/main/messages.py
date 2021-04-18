@@ -55,9 +55,7 @@ def new_goods_subscribers_weekly_notification(goods, profile):
 
 def send_sms_to_number(to_number, sms_text):
     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOCKEN)
-    message = client.messages .create(
-                     body=sms_text,
-                     from_=settings.TWILIO_PHONE_NUMBER,
-                     to=to_number
-                 )
+    message = client.messages.create(
+        body=sms_text, from_=settings.TWILIO_PHONE_NUMBER, to=to_number
+    )
     return message

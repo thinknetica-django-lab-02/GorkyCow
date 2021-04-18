@@ -3,13 +3,14 @@ from datetime import datetime
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, ListView, TemplateView, FormView
+from django.views.generic import DetailView, FormView, ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 
-from main.forms import GoodsCreateUpdateForm, ProfileFormSet, UserForm, PhoneConfirmForm
-from main.models import Goods, Profile, Seller, Tag, User, SMSLog
+from main.forms import (GoodsCreateUpdateForm, PhoneConfirmForm,
+                        ProfileFormSet, UserForm)
+from main.models import Goods, Profile, Seller, SMSLog, Tag, User
 from main.tasks import send_sms_verification_code
 
 
