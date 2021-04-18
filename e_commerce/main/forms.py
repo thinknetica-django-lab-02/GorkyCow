@@ -120,8 +120,6 @@ class PhoneConfirmForm(forms.Form):
         super(PhoneConfirmForm, self).__init__(*args, **kwargs)
 
     def clean_code(self):
-        # from pdb import set_trace
-        # set_trace()
         sms_log = (
             SMSLog.objects.filter(user=self.request.user)
             .order_by("creation_date")
