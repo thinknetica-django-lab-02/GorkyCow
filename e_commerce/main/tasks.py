@@ -16,7 +16,8 @@ logger = get_task_logger(__name__)
 @shared_task
 def send_welcome_email_task(user_id):
     logger.info(f"Sending welcome email to new user with id {user_id}")
-    user = User.objects.get(id=user_id)
+    user_model = apps.get_model("auth.User")
+    user = user_model.objects.get(id=user_id)
     send_welcome_email(user)
 
 

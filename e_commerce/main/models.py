@@ -140,7 +140,7 @@ class Profile(models.Model):
             )
             instance.groups.add(common_users_group)
             Profile.objects.create(user=instance)
-            send_welcome_email_task(instance.id)
+            send_welcome_email_task.delay(instance.id)
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
