@@ -6,7 +6,8 @@ from django.dispatch import receiver
 from django.urls import reverse
 from sorl.thumbnail import ImageField
 
-from main.tasks import send_welcome_email_task, send_new_goods_subscribers_notification_task
+from main.tasks import (send_new_goods_subscribers_notification_task,
+                        send_welcome_email_task)
 
 
 class Seller(models.Model):
@@ -103,7 +104,9 @@ class Subscriptions(models.Model):
         if created:
             subscription = Subscriptions.objects.get(name="New goods")
             for profile in Profile.objects.filter(subsciber=subscription):
-                send_new_goods_subscribers_notification_task.delay(instance.id, profile.id)
+                send_new_goods_subscribers_notification_task.delay(
+                    instance.id, profile.id
+                )
 
 
 class Profile(models.Model):
