@@ -1,11 +1,12 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
+from django.views.decorators.cache import cache_page
 
 from . import views
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", cache_page(60 * 15)(views.index), name="index"),
     path("goods/", views.GoodsList.as_view(), name="goods"),
     path(
         "phone_confirmation/",
