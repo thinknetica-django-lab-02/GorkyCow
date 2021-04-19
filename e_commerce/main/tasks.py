@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from random import randrange
 
 from celery import shared_task
 from celery.utils.log import get_task_logger
@@ -7,7 +8,7 @@ from django.contrib.auth.models import User
 
 from .messages import (new_goods_subscribers_notification,
                        new_goods_subscribers_weekly_notification,
-                       send_welcome_email)
+                       send_sms_to_number, send_welcome_email)
 
 logger = get_task_logger(__name__)
 
@@ -42,3 +43,17 @@ def send_weekly_new_goods_email_task():
     if new_goods:
         for profile in profile_model.objects.filter(subsciber=subscription):
             new_goods_subscribers_weekly_notification(new_goods, profile)
+
+
+@shared_task
+def send_sms_verification_code(profile_id):
+    verification_code = randrange(1000, 9999, 1)
+    profile_model = apps.get_model("main.Profile")
+    profile = profile_model.objects.get(id=profile_id)
+    message = send_sms_to_number(
+        profile.phone_number, f"Virification code: {verification_code}"
+    )
+    smslog_model = apps.get_model("main.SMSLog")
+    smslog = smslog_model.objects.create(
+        user=profile.user, code=verification_code, message=message
+    )

@@ -89,6 +89,9 @@
                             {% else %}
                                 {{ field.label_tag }} {{ field|addclass:'form-control' }}
                             {% endif %}
+                            {% if not user.profile.is_phone_confirmed %}
+                                <a role="button" class="btn btn-sm btn-outline-secondary" href="{% url 'phone-confirmation' %}">Подтвердить</a>
+                            {% endif %}
                         </div>
                         
                     {% elif "birth_date" in field.name %}

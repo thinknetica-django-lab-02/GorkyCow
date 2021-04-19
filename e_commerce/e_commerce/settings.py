@@ -22,7 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "nq!b#*^_()^21d**oz29=x5a8q=10j(jhu1r!l-dlbh*mvffv!"
+secrets = load_secrets("secrets.yml")
+SECRET_KEY = secrets["django"]["secret_key"]
+TWILIO_ACCOUNT_SID = secrets["twilio"]["account_sid"]
+TWILIO_AUTH_TOCKEN = secrets["twilio"]["auth_token"]
+TWILIO_PHONE_NUMBER = secrets["twilio"]["from_number"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -100,7 +104,6 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-secrets = load_secrets("secrets.yml")
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
