@@ -3,10 +3,11 @@ from datetime import datetime
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
+from django.core.cache import cache
 
 from main.forms import (GoodsCreateUpdateForm, PhoneConfirmForm,
                         ProfileFormSet, UserForm)
@@ -49,6 +50,18 @@ class GoodsDetail(DetailView):
         else:
             context["avatar"] = None
         return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        if "views_counter" not in context:
+            views_counter_cache_name = f"views_counter_{context['goods'].id}"
+            context["views_counter"] = cache.get(views_counter_cache_name)
+            if not context["views_counter"]:
+                context["views_counter"] = Goods.objects.get(id=context['goods'].id).views_counter
+            context["views_counter"] += 1
+            cache.set(views_counter_cache_name, context["views_counter"], 120)
+        return self.render_to_response(context)
 
 
 class GoodsCreate(PermissionRequiredMixin, CreateView):

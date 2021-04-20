@@ -4,7 +4,8 @@ from random import randrange
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.apps import apps
-from django.contrib.auth.models import User
+from django.core.cache import cache
+from django.db import transaction
 
 from .messages import (new_goods_subscribers_notification,
                        new_goods_subscribers_weekly_notification,
@@ -51,6 +52,7 @@ def send_sms_verification_code(profile_id):
     verification_code = randrange(1000, 9999, 1)
     profile_model = apps.get_model("main.Profile")
     profile = profile_model.objects.get(id=profile_id)
+    logger.info(f"Sending verification code via SMS to number: {profile.phone_number}")
     message = send_sms_to_number(
         profile.phone_number, f"Virification code: {verification_code}"
     )
@@ -58,3 +60,18 @@ def send_sms_verification_code(profile_id):
     smslog = smslog_model.objects.create(
         user=profile.user, code=verification_code, message=message
     )
+
+
+@shared_task
+def save_views_counter_cached_values_task():
+    logger.info(f"Saving goods views counters to DB")
+    goods_model = apps.get_model("main.Goods")
+    goods_ids = list(goods_model.objects.all().values_list('id', flat=True))
+    cache_keys = [f"views_counter_{gid}" for gid in goods_ids]
+    cache_values = cache.get_many(cache_keys)
+    with transaction.atomic():
+        for key, value in cache_values.items():
+            goods = goods_model.objects.get(id=int(key.replace("views_counter_", "")))
+            goods.views_counter = value
+            goods.save()
+    logger.info(f"Saved goods views counters successfully")

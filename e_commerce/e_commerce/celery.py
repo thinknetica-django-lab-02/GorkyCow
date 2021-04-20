@@ -16,4 +16,8 @@ app.conf.beat_schedule = {
         "task": "main.tasks.send_weekly_new_goods_email_task",
         "schedule": crontab(hour=12, minute=0, day_of_week="monday"),
     },
+    "save_views_counter_cached_values_task": {
+        "task": "main.tasks.save_views_counter_cached_values_task",
+        "schedule": crontab(minute='*/1'),
+    },
 }

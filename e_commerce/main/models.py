@@ -76,6 +76,7 @@ class Goods(models.Model):
     discount = models.FloatField(default=0, null=False)
     image = ImageField(upload_to="goods/", verbose_name="Фото", blank=True)
     creation_date = models.DateField(verbose_name="Дата создания")
+    views_counter = models.IntegerField(default=0)
 
     class Meta:
         ordering = ["name"]
