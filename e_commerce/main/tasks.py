@@ -66,7 +66,7 @@ def send_sms_verification_code(profile_id):
 def save_views_counter_cached_values_task():
     logger.info(f"Saving goods views counters to DB")
     goods_model = apps.get_model("main.Goods")
-    goods_ids = list(goods_model.objects.all().values_list('id', flat=True))
+    goods_ids = list(goods_model.objects.all().values_list("id", flat=True))
     cache_keys = [f"views_counter_{gid}" for gid in goods_ids]
     cache_values = cache.get_many(cache_keys)
     with transaction.atomic():

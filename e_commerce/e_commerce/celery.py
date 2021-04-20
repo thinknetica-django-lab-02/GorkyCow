@@ -18,6 +18,6 @@ app.conf.beat_schedule = {
     },
     "save_views_counter_cached_values_task": {
         "task": "main.tasks.save_views_counter_cached_values_task",
-        "schedule": crontab(minute='*/1'),
+        "schedule": crontab(minute="*/1"),
     },
 }
