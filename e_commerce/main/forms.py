@@ -30,10 +30,10 @@ class ProfileForm(forms.ModelForm):
             "subsciber": "Подписки",
         }
         widgets = {
-            "birth_date": forms.widgets.SelectDateWidget(
+            "birth_date": widgets.SelectDateWidget(
                 years=range(datetime.now().year - 100, datetime.now().year + 1)
             ),
-            "subsciber": forms.widgets.SelectMultiple(
+            "subsciber": widgets.SelectMultiple(
                 choices=Subscriptions.objects.all()
             ),
         }
@@ -66,20 +66,21 @@ class GoodsCreateUpdateForm(forms.ModelForm):
             "discount": "Скидка",
         }
         widgets = {
-            "description": forms.widgets.Textarea(attrs={"cols": 60, "rows": 5}),
-            "weight": forms.widgets.NumberInput(),
-            "category": forms.widgets.Select(choices=Category.objects.all()),
-            "tags": forms.widgets.SelectMultiple(choices=Tag.objects.all()),
-            "size": forms.widgets.Select(),
-            "price": forms.widgets.NumberInput(),
-            "discount": forms.widgets.NumberInput(),
+            "description": widgets.Textarea(attrs={"cols": 60, "rows": 5}),
+            "weight": widgets.NumberInput(),
+            "category": widgets.Select(choices=Category.objects.all()),
+            "tags": widgets.SelectMultiple(choices=Tag.objects.all()),
+            "size": widgets.Select(),
+            "price": widgets.NumberInput(),
+            "discount": widgets.NumberInput(),
         }
 
     def clean_discount(self):
         data = self.cleaned_data["discount"]
         if data > 90:
             raise ValidationError(
-                _("Скидка не может быть больше 90 процентов. Введено: %(value)s"),
+                _("Скидка не может быть больше 90 процентов. "
+                    + "Введено: %(value)s"),
                 code="invalid",
                 params={"value": data},
             )
@@ -88,7 +89,12 @@ class GoodsCreateUpdateForm(forms.ModelForm):
 
 
 class ProfileFormSet(
-    inlineformset_factory(User, Profile, form=ProfileForm, can_delete=False)
+    inlineformset_factory(
+        User,
+        Profile,
+        form=ProfileForm,
+        can_delete=False
+    )
 ):
     def __init__(self, *args, **kwargs):
         self.__initial = kwargs.pop("initial", [])

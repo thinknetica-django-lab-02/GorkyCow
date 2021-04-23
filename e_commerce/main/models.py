@@ -27,7 +27,10 @@ class Seller(models.Model):
         return self.name
 
     def __repr__(self):
-        return f"Seller(name='{self.name}', status='{self.status}', rating={self.rating}, email='{self.email}')"
+        return (
+            f"Seller(name='{self.name}', status='{self.status}', "
+            + f"rating={self.rating}, email='{self.email}')"
+        )
 
 
 class Category(models.Model):
@@ -86,8 +89,11 @@ class Goods(models.Model):
 
     def __repr__(self):
         return (
-            f"Goods(name='{self.name}', description='{self.description}', seller={self.seller}, weight={self.weight}, "
-            + f"category={self.category}, manufacturer='{self.manufacturer}', tags={self.tags.all()}, size='{self.size}', rating={self.rating}, price={self.price}, "
+            f"Goods(name='{self.name}', description='{self.description}', "
+            + f"seller={self.seller}, weight={self.weight}, "
+            + f"category={self.category}, manufacturer='{self.manufacturer}'"
+            + f", tags={self.tags.all()}, size='{self.size}', "
+            + f"rating={self.rating}, price={self.price}, "
             + f"image={self.image or None})"
         )
 
@@ -118,14 +124,23 @@ class Profile(models.Model):
     )
     phone_regex = RegexValidator(
         regex=r"^\+?1?\d{9,15}$",
-        message="Телефонный номер должен быть в формате: '+999999999' и не длиннее 15 символов.",
+        message="Телефонный номер должен быть в формате: "
+                + "'+999999999' и не длиннее 15 символов.",
     )
-    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
+    phone_number = models.CharField(
+        validators=[phone_regex],
+        max_length=17,
+        blank=True
+    )
     is_phone_confirmed = models.BooleanField(
         default=False, verbose_name="Телефон подтвержден"
     )
     birth_date = models.DateField(null=True, blank=True)
-    avatar = ImageField(upload_to="user_profile/", verbose_name="Аватар", blank=True)
+    avatar = ImageField(
+        upload_to="user_profile/",
+        verbose_name="Аватар",
+        blank=True
+    )
     subsciber = models.ManyToManyField(
         Subscriptions, verbose_name="Подписки", blank=True
     )

@@ -18,9 +18,9 @@ def swap_chars(word: str, first_char: int, second_char: int):
     return (
         word[:first_char]
         + word[second_char]
-        + word[first_char + 1 : second_char]
+        + word[first_char + 1:second_char]
         + word[first_char]
-        + word[second_char + 1 :]
+        + word[second_char + 1:]
     )
 
 
@@ -29,7 +29,11 @@ def dyslexia(value):
     if isinstance(value, str):
         return " ".join(
             [
-                swap_chars(word, randint(1, len(word) - 2), randint(1, len(word) - 2))
+                swap_chars(
+                    word,
+                    randint(1, len(word) - 2),
+                    randint(1, len(word) - 2)
+                )
                 if len(word) > 3
                 else word
                 for word in value.split()

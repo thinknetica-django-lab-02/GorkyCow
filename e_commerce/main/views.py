@@ -11,7 +11,7 @@ from django.views.generic.edit import CreateView, UpdateView
 
 from main.forms import (GoodsCreateUpdateForm, PhoneConfirmForm,
                         ProfileFormSet, UserForm)
-from main.models import Goods, Profile, Seller, SMSLog, Tag, User
+from main.models import Goods, Profile, Seller, Tag, User
 from main.tasks import send_sms_verification_code
 
 
@@ -25,7 +25,9 @@ class GoodsList(ListView):
         context["tag_list"] = Tag.objects.all()
         context["tag"] = self.request.GET.get("tag")
         if self.request.user.is_authenticated:
-            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
+            context["avatar"] = Profile.objects.get(
+                user=self.request.user
+            ).avatar
         else:
             context["avatar"] = None
         return context
@@ -46,7 +48,9 @@ class GoodsDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
+            context["avatar"] = Profile.objects.get(
+                user=self.request.user
+            ).avatar
         else:
             context["avatar"] = None
         return context
@@ -75,7 +79,10 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
     form_class = GoodsCreateUpdateForm
 
     def get_success_url(self):
-        self.success_url = reverse_lazy("goods-detail", kwargs={"pk": self.object.pk})
+        self.success_url = reverse_lazy(
+            "goods-detail",
+            kwargs={"pk": self.object.pk}
+        )
         return self.success_url
 
     def get_context_data(self, **kwargs):
@@ -93,7 +100,9 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
         context["filds_for_custom_select"] = ("tags", "size", "category")
         context["form"] = kwargs.get("form")
         if self.request.user.is_authenticated:
-            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
+            context["avatar"] = Profile.objects.get(
+                user=self.request.user
+            ).avatar
         else:
             context["avatar"] = None
         return context
@@ -107,9 +116,10 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
 
     def form_valid(self, form):
         temp_goods = form.save(commit=False)
+        # TODO: заменить на юзера, когда будет готова проверка для продавцов
         temp_goods.seller = Seller.objects.get(
             name="Bobbie's Bits"
-        )  # TODO: заменить на юзера, когда будет готова авторизация для продавцов
+        )
         temp_goods.creation_date = datetime.now()
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
@@ -127,7 +137,10 @@ class GoodsUpdate(PermissionRequiredMixin, UpdateView):
     form_class = GoodsCreateUpdateForm
 
     def get_success_url(self):
-        self.success_url = reverse_lazy("goods-detail", kwargs={"pk": self.object.pk})
+        self.success_url = reverse_lazy(
+            "goods-detail",
+            kwargs={"pk": self.object.pk}
+        )
         return self.success_url
 
     def get_context_data(self, **kwargs):
@@ -145,7 +158,9 @@ class GoodsUpdate(PermissionRequiredMixin, UpdateView):
         context["filds_for_custom_select"] = ("tags", "size", "category")
         context["form"] = kwargs.get("form")
         if self.request.user.is_authenticated:
-            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
+            context["avatar"] = Profile.objects.get(
+                user=self.request.user
+            ).avatar
         else:
             context["avatar"] = None
         return context
@@ -174,7 +189,10 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     context_object_name = "profile"
 
     def get_success_url(self):
-        self.success_url = reverse_lazy("profile", kwargs={"pk": self.request.user.pk})
+        self.success_url = reverse_lazy(
+            "profile",
+            kwargs={"pk": self.request.user.pk}
+        )
         return self.success_url
 
     def get_context_data(self, **kwargs):

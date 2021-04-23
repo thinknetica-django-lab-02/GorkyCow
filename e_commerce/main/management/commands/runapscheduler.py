@@ -24,7 +24,8 @@ def send_new_goods_weekly_schedule():
 
 
 def delete_old_job_executions(max_age=604_800):
-    """This job deletes all apscheduler job executions older than `max_age` from the database."""
+    """This job deletes all apscheduler job
+    executions older than `max_age` from the database."""
     DjangoJobExecution.objects.delete_old_job_executions(max_age)
 
 
