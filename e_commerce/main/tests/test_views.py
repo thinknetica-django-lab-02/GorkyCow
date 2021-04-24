@@ -3,7 +3,7 @@ from django.test import Client, TestCase
 from django.urls import reverse_lazy
 from django.utils.timezone import now
 
-from main.models import Category, Goods, Profile, Seller, Subscriptions, Tag
+from main.models import Category, Goods, Seller, Subscriptions
 
 
 class GoodsListTestCase(TestCase):
@@ -45,8 +45,12 @@ class GoodsDetailTestCase(TestCase):
 class GoodsCreateTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user("john", "lennon@qa.com", "johnpassword")
-        sellers_group, created_grp = Group.objects.get_or_create(name="sellers")
+        self.user = User.objects.create_user(
+            "john",
+            "lennon@qa.com",
+            "johnpassword"
+        )
+        sellers_group, created = Group.objects.get_or_create(name="sellers")
         add_goods = Permission.objects.get(name="Can add goods")
         sellers_group.permissions.add(add_goods)
         sellers_group.user_set.add(self.user)
@@ -60,8 +64,12 @@ class GoodsCreateTestCase(TestCase):
 class GoodsEditTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user("john", "lennon@qa.com", "johnpassword")
-        sellers_group, created_grp = Group.objects.get_or_create(name="sellers")
+        self.user = User.objects.create_user(
+            "john",
+            "lennon@qa.com",
+            "johnpassword"
+        )
+        sellers_group, created = Group.objects.get_or_create(name="sellers")
         change_goods = Permission.objects.get(name="Can change goods")
         sellers_group.permissions.add(change_goods)
         sellers_group.user_set.add(self.user)
@@ -93,11 +101,20 @@ class GoodsEditTestCase(TestCase):
 class ProfileUpdateTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user("john", "lennon@qa.com", "johnpassword")
+        self.user = User.objects.create_user(
+            "john",
+            "lennon@qa.com",
+            "johnpassword"
+        )
 
     def test_responce_status(self):
         self.client.login(username="john", password="johnpassword")
-        response = self.client.get(reverse_lazy("profile", kwargs={"pk": self.user.id}))
+        response = self.client.get(
+            reverse_lazy(
+                "profile",
+                kwargs={"pk": self.user.id}
+            )
+        )
         self.assertEqual(response.status_code, 200)
 
 
@@ -113,7 +130,11 @@ class IndexTestCase(TestCase):
 class LoginTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user("john", "lennon@qa.com", "johnpassword")
+        self.user = User.objects.create_user(
+            "john",
+            "lennon@qa.com",
+            "johnpassword"
+        )
 
     def testLogin(self):
         self.client.login(username="john", password="johnpassword")

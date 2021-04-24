@@ -26,11 +26,17 @@ def new_goods_subscribers_notification(goods, profile):
         "goods_description": goods.description,
         "goods_id": goods.id,
     }
-    html_message = get_template("account/email/new_goods_email.html").render(ctx)
+    html_message = get_template(
+        "account/email/new_goods_email.html"
+    ).render(ctx)
     url = reverse_lazy("goods-detail", kwargs={"pk": goods.id})
-    text_content = f"Привет, {profile.user.get_username()}! В Bomzhon появился новый товар. Подробности по ссылке: {url}"
+    text_content = f"Привет, {profile.user.get_username()}! "
+    + f"В Bomzhon появился новый товар. Подробности по ссылке: {url}"
     msg = EmailMultiAlternatives(
-        subject, text_content, settings.DEFAULT_FROM_EMAIL, [profile.user.email]
+        subject,
+        text_content,
+        settings.DEFAULT_FROM_EMAIL,
+        [profile.user.email]
     )
     msg.attach_alternative(html_message, "text/html")
     msg.send()
@@ -43,11 +49,17 @@ def new_goods_subscribers_weekly_notification(goods, profile):
         "user_name": profile.user.get_username(),
         "new_goods": goods,
     }
-    html_message = get_template("account/email/new_goods_email_weekly.html").render(ctx)
+    html_message = get_template(
+        "account/email/new_goods_email_weekly.html"
+    ).render(ctx)
     url = reverse_lazy("goods")
-    text_content = f"Привет, {profile.user.get_username()}! В Bomzhon появились новые товары. Подробности по ссылке: {url}"
+    text_content = f"Привет, {profile.user.get_username()}! "
+    + f"В Bomzhon появились новые товары. Подробности по ссылке: {url}"
     msg = EmailMultiAlternatives(
-        subject, text_content, settings.DEFAULT_FROM_EMAIL, [profile.user.email]
+        subject,
+        text_content,
+        settings.DEFAULT_FROM_EMAIL,
+        [profile.user.email]
     )
     msg.attach_alternative(html_message, "text/html")
     msg.send()
