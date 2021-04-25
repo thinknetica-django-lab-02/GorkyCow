@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>main.templatetags package &#8212; e_commerce 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="main-templatetags-package">
+<h1>main.templatetags package<a class="headerlink" href="#main-templatetags-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-main.templatetags.main_extras">
+<span id="main-templatetags-main-extras-module"></span><h2>main.templatetags.main_extras module<a class="headerlink" href="#module-main.templatetags.main_extras" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="main.templatetags.main_extras.addclass">
+<code class="sig-prename descclassname"><span class="pre">main.templatetags.main_extras.</span></code><code class="sig-name descname"><span class="pre">addclass</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.templatetags.main_extras.addclass" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function adds a CSS class to a given HTML tag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>class 'django.forms.boundfield.BoundField'</em>) – a tag in which a CSS class will be added</p></li>
+<li><p><strong>arg</strong> (<em>str</em>) – CSS class name</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="main.templatetags.main_extras.current_time">
+<code class="sig-prename descclassname"><span class="pre">main.templatetags.main_extras.</span></code><code class="sig-name descname"><span class="pre">current_time</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format_string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.templatetags.main_extras.current_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns the current server time in a given string format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>format_string</strong> (<em>str</em>) – a string that provides how-to format time</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="main.templatetags.main_extras.dyslexia">
+<code class="sig-prename descclassname"><span class="pre">main.templatetags.main_extras.</span></code><code class="sig-name descname"><span class="pre">dyslexia</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.templatetags.main_extras.dyslexia" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function swaps two random chars in all words of a given string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – input string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="main.templatetags.main_extras.revert">
+<code class="sig-prename descclassname"><span class="pre">main.templatetags.main_extras.</span></code><code class="sig-name descname"><span class="pre">revert</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.templatetags.main_extras.revert" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function reverts a given string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – a string which will be reverted</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="main.templatetags.main_extras.swap_chars">
+<code class="sig-prename descclassname"><span class="pre">main.templatetags.main_extras.</span></code><code class="sig-name descname"><span class="pre">swap_chars</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_char</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_char</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.templatetags.main_extras.swap_chars" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function swaps ‘first_char’ and ‘second_char’ in a given ‘word’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>word</strong> (<em>str</em>) – a word where chars will be swapped</p></li>
+<li><p><strong>first_char</strong> (<em>int</em>) – position of a first char</p></li>
+<li><p><strong>second_char</strong> (<em>int</em>) – position of a second char</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-main.templatetags">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-main.templatetags" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">e_commerce</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, GorkyCow.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/main.templatetags.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
