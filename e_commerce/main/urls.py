@@ -13,11 +13,7 @@ urlpatterns = [
         views.PhoneConfirmation.as_view(),
         name="phone-confirmation",
     ),
-    path(
-        "phone_confirmed/",
-        views.PhoneConfirmed.as_view(),
-        name="phone-confirmed"
-    ),
+    path("phone_confirmed/", views.PhoneConfirmed.as_view(), name="phone-confirmed"),
     path("goods/<int:pk>/", views.GoodsDetail.as_view(), name="goods-detail"),
     path(
         "goods/create/",
@@ -38,11 +34,5 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT
-    )
-    urlpatterns += static(
-        settings.STATIC_URL,
-        document_root=settings.STATIC_ROOT
-    )
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

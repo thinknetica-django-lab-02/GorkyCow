@@ -7,8 +7,10 @@ from django.urls import reverse
 from picklefield.fields import PickledObjectField
 from sorl.thumbnail import ImageField
 
-from main.tasks import (send_new_goods_subscribers_notification_task,
-                        send_welcome_email_task)
+from main.tasks import (
+    send_new_goods_subscribers_notification_task,
+    send_welcome_email_task,
+)
 
 
 class Seller(models.Model):
@@ -21,6 +23,7 @@ class Seller(models.Model):
     rating - a rating of a seller
     email - a contact email address of a seller
     """
+
     STATUSES = (
         ("A", "Active"),
         ("P", "Partner"),
@@ -47,6 +50,7 @@ class Category(models.Model):
 
     name - a name of a category
     """
+
     name = models.CharField(max_length=80)
 
     def __str__(self):
@@ -61,6 +65,7 @@ class Tag(models.Model):
 
     name - a name of a tag
     """
+
     name = models.CharField(max_length=80)
 
     def __str__(self):
@@ -91,6 +96,7 @@ class Goods(models.Model):
     creation_date - a date when a good had been created
     views_counter - a current views counter
     """
+
     SIZES = (
         ("S", "Small"),
         ("M", "Medium"),
@@ -140,6 +146,7 @@ class Subscriptions(models.Model):
 
     name - a name of a subscription
     """
+
     name = models.CharField(max_length=80)
 
     def __str__(self):
@@ -170,7 +177,7 @@ class Subscriptions(models.Model):
 
 
 class Profile(models.Model):
-    """This class describes how to store and operate data about user's 
+    """This class describes how to store and operate data about user's
     profiles.
 
     user - a foreign key of a user linked to this profile
@@ -182,6 +189,7 @@ class Profile(models.Model):
     avatar - user's uploaded profile pic
     subsciber - a foreign keys of user's subscriptions
     """
+
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -189,22 +197,14 @@ class Profile(models.Model):
     phone_regex = RegexValidator(
         regex=r"^\+?1?\d{9,15}$",
         message="Телефонный номер должен быть в формате: "
-                + "'+999999999' и не длиннее 15 символов.",
+        + "'+999999999' и не длиннее 15 символов.",
     )
-    phone_number = models.CharField(
-        validators=[phone_regex],
-        max_length=17,
-        blank=True
-    )
+    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
     is_phone_confirmed = models.BooleanField(
         default=False, verbose_name="Телефон подтвержден"
     )
     birth_date = models.DateField(null=True, blank=True)
-    avatar = ImageField(
-        upload_to="user_profile/",
-        verbose_name="Аватар",
-        blank=True
-    )
+    avatar = ImageField(upload_to="user_profile/", verbose_name="Аватар", blank=True)
     subsciber = models.ManyToManyField(
         Subscriptions, verbose_name="Подписки", blank=True
     )
@@ -255,6 +255,7 @@ class SMSLog(models.Model):
     message - a server response
     creation_date - date and time when a message was sent
     """
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

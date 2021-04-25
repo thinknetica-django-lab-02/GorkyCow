@@ -10,8 +10,8 @@ from .models import Category, Goods, Profile, SMSLog, Subscriptions, Tag, User
 
 
 class UserForm(forms.ModelForm):
-    """This class describes a form that used to update a User object's fields.
-    """
+    """This class describes a form that used to update a User object's fields."""
+
     class Meta:
         model = User
         fields = ("first_name", "last_name", "email")
@@ -23,9 +23,10 @@ class UserForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
-    """This class describes a form that used to update 
+    """This class describes a form that used to update
     a Profile object's fields.
     """
+
     class Meta:
         model = Profile
         fields = "__all__"
@@ -38,9 +39,7 @@ class ProfileForm(forms.ModelForm):
             "birth_date": widgets.SelectDateWidget(
                 years=range(datetime.now().year - 100, datetime.now().year + 1)
             ),
-            "subsciber": widgets.SelectMultiple(
-                choices=Subscriptions.objects.all()
-            ),
+            "subsciber": widgets.SelectMultiple(choices=Subscriptions.objects.all()),
         }
 
 
@@ -48,6 +47,7 @@ class GoodsCreateUpdateForm(forms.ModelForm):
     """This class describes a form that used to create a Goods object
     or update an existing Goods object's fields.
     """
+
     class Meta:
         model = Goods
         fields = (
@@ -84,14 +84,13 @@ class GoodsCreateUpdateForm(forms.ModelForm):
         }
 
     def clean_discount(self):
-        """This method provides a custom check for the 'discount' field and 
+        """This method provides a custom check for the 'discount' field and
         raises an error if the discount more than 90%.
         """
         data = self.cleaned_data["discount"]
         if data > 90:
             raise ValidationError(
-                _("Скидка не может быть больше 90 процентов. "
-                    + "Введено: %(value)s"),
+                _("Скидка не может быть больше 90 процентов. " + "Введено: %(value)s"),
                 code="invalid",
                 params={"value": data},
             )
@@ -100,16 +99,12 @@ class GoodsCreateUpdateForm(forms.ModelForm):
 
 
 class ProfileFormSet(
-    inlineformset_factory(
-        User,
-        Profile,
-        form=ProfileForm,
-        can_delete=False
-    )
+    inlineformset_factory(User, Profile, form=ProfileForm, can_delete=False)
 ):
     """This class describes a formset that used to combine the 'UserForm'
     and the 'ProfileForm' in one.
     """
+
     def __init__(self, *args, **kwargs):
         self.__initial = kwargs.pop("initial", [])
         super(ProfileFormSet, self).__init__(*args, **kwargs)
@@ -139,6 +134,7 @@ class PhoneConfirmForm(forms.Form):
     """This class describes a form that used to confirm that
     a phone number exists.
     """
+
     code = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):

@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from django.contrib.auth.mixins import (LoginRequiredMixin,
-                                        PermissionRequiredMixin)
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -9,8 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 
-from main.forms import (GoodsCreateUpdateForm, PhoneConfirmForm,
-                        ProfileFormSet, UserForm)
+from main.forms import GoodsCreateUpdateForm, PhoneConfirmForm, ProfileFormSet, UserForm
 from main.models import Goods, Profile, Seller, Tag, User
 from main.tasks import send_sms_verification_code
 
@@ -23,6 +21,7 @@ class GoodsList(ListView):
     context_object_name - a name by which objects can be available
     in a template
     """
+
     model = Goods
     paginate_by = 9
     context_object_name = "goods_list"
@@ -35,9 +34,7 @@ class GoodsList(ListView):
         context["tag_list"] = Tag.objects.all()
         context["tag"] = self.request.GET.get("tag")
         if self.request.user.is_authenticated:
-            context["avatar"] = Profile.objects.get(
-                user=self.request.user
-            ).avatar
+            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
         else:
             context["avatar"] = None
         return context
@@ -61,6 +58,7 @@ class GoodsDetail(DetailView):
     context_object_name - a name by which objects can be available
     in a template
     """
+
     queryset = Goods.objects.all()
     context_object_name = "goods"
 
@@ -70,9 +68,7 @@ class GoodsDetail(DetailView):
         """
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            context["avatar"] = Profile.objects.get(
-                user=self.request.user
-            ).avatar
+            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
         else:
             context["avatar"] = None
         return context
@@ -109,6 +105,7 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
     template_name - a template that will be used for a page rendering
     form_class - model form class
     """
+
     permission_required = "main.add_goods"
     login_url = reverse_lazy("account_login")
     redirect_field_name = "redirect_to"
@@ -120,10 +117,7 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
         """This overridden method provides URL for a detailed view of
         a newly created 'Goods' object.
         """
-        self.success_url = reverse_lazy(
-            "goods-detail",
-            kwargs={"pk": self.object.pk}
-        )
+        self.success_url = reverse_lazy("goods-detail", kwargs={"pk": self.object.pk})
         return self.success_url
 
     def get_context_data(self, **kwargs):
@@ -145,9 +139,7 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
         context["filds_for_custom_select"] = ("tags", "size", "category")
         context["form"] = kwargs.get("form")
         if self.request.user.is_authenticated:
-            context["avatar"] = Profile.objects.get(
-                user=self.request.user
-            ).avatar
+            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
         else:
             context["avatar"] = None
         return context
@@ -155,7 +147,7 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
     def post(self, request, *args, **kwargs):
         """This overridden method checks a form's data and saves it if it's
         valid or returns this form with found errors.
-        
+
         :param request: post request object
         :type request: class 'django.http.request.HttpRequest'
         """
@@ -169,15 +161,13 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
         """This overridden method saves form's data to DB and returns a
         response with redirection to a detailed page of a created
         'Goods' object.
-        
+
         :param form: form with user's data
         :type form: class 'main.forms.GoodsCreateUpdateForm'
         """
         temp_goods = form.save(commit=False)
         # TODO: заменить на юзера, когда будет готова проверка для продавцов
-        temp_goods.seller = Seller.objects.get(
-            name="Bobbie's Bits"
-        )
+        temp_goods.seller = Seller.objects.get(name="Bobbie's Bits")
         temp_goods.creation_date = datetime.now()
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
@@ -185,7 +175,7 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
     def form_invalid(self, form):
         """This overridden method returns a response with a template rendered
         with the given context. The context contains a form with found errors.
-        
+
         :param form: form with user's data
         :type form: class 'main.forms.GoodsCreateUpdateForm'
         """
@@ -203,6 +193,7 @@ class GoodsUpdate(PermissionRequiredMixin, UpdateView):
     template_name - a template that will be used for a page rendering
     form_class - model form class
     """
+
     permission_required = "main.change_goods"
     login_url = reverse_lazy("account_login")
     redirect_field_name = "redirect_to"
@@ -214,10 +205,7 @@ class GoodsUpdate(PermissionRequiredMixin, UpdateView):
         """This overridden method provides URL for a detailed view of
         a newly created 'Goods' object.
         """
-        self.success_url = reverse_lazy(
-            "goods-detail",
-            kwargs={"pk": self.object.pk}
-        )
+        self.success_url = reverse_lazy("goods-detail", kwargs={"pk": self.object.pk})
         return self.success_url
 
     def get_context_data(self, **kwargs):
@@ -239,9 +227,7 @@ class GoodsUpdate(PermissionRequiredMixin, UpdateView):
         context["filds_for_custom_select"] = ("tags", "size", "category")
         context["form"] = kwargs.get("form")
         if self.request.user.is_authenticated:
-            context["avatar"] = Profile.objects.get(
-                user=self.request.user
-            ).avatar
+            context["avatar"] = Profile.objects.get(user=self.request.user).avatar
         else:
             context["avatar"] = None
         return context
@@ -250,7 +236,7 @@ class GoodsUpdate(PermissionRequiredMixin, UpdateView):
         """This overridden method checks a form's data and updates with it
         linked 'Goods' object if data is valid or returns this form with
         found errors.
-        
+
         :param request: post request object
         :type request: class 'django.http.request.HttpRequest'
         """
@@ -264,7 +250,7 @@ class GoodsUpdate(PermissionRequiredMixin, UpdateView):
         """This overridden method saves form's data to DB and returns a
         response with redirection to a detailed page of an updated
         'Goods' object.
-        
+
         :param form: form with user's data
         :type form: class 'main.forms.GoodsCreateUpdateForm'
         """
@@ -274,7 +260,7 @@ class GoodsUpdate(PermissionRequiredMixin, UpdateView):
     def form_invalid(self, form):
         """This overridden method returns a response with a template rendered
         with the given context. The context contains a form with found errors.
-        
+
         :param form: form with user's data
         :type form: class 'main.forms.GoodsCreateUpdateForm'
         """
@@ -292,6 +278,7 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     context_object_name - a name by which objects can be available
     in a template
     """
+
     login_url = reverse_lazy("account_login")
     redirect_field_name = "redirect_to"
     model = User
@@ -303,10 +290,7 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
         """This overridden method provides URL for an update view of
         a linked user's 'Profile'.
         """
-        self.success_url = reverse_lazy(
-            "profile",
-            kwargs={"pk": self.request.user.pk}
-        )
+        self.success_url = reverse_lazy("profile", kwargs={"pk": self.request.user.pk})
         return self.success_url
 
     def get_context_data(self, **kwargs):
@@ -326,7 +310,7 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         """This overridden method gets a 'User' object linked with 'Profile'
         and returns a rendered template of a 'Profile' update view.
-        
+
         :param request: user's request object
         :type request: class 'django.http.request.HttpRequest'
         """
@@ -337,7 +321,7 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
         """This overridden method checks data in forms and updates with it
         linked 'User' and 'Profile' objects if data is valid or returns these
         forms with found errors.
-        
+
         :param request: post request object
         :type request: class 'django.http.request.HttpRequest'
         """
@@ -354,7 +338,7 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     def form_valid(self, user_form, profile_form_set):
         """This overridden method saves data in forms to DB and returns a
         response with redirection to a successful URL.
-        
+
         :param user_form: form with user's data
         :type user_form: class 'main.forms.UserForm'
         :param profile_form_set: form with user's data
@@ -372,7 +356,7 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     def form_invalid(self, user_form, profile_form_set):
         """This overridden method returns a response with a template rendered
         with the given context. The context contains forms with found errors.
-        
+
         :param user_form: form with user's data
         :type user_form: class 'main.forms.UserForm'
         :param profile_form_set: form with user's data
@@ -395,6 +379,7 @@ class PhoneConfirmation(LoginRequiredMixin, FormView):
     template_name - a template that will be used for a page rendering
     success_url - a URL of a 'phone confirmed' page
     """
+
     login_url = reverse_lazy("account_login")
     redirect_field_name = "redirect_to"
     form_class = PhoneConfirmForm
@@ -413,7 +398,7 @@ class PhoneConfirmation(LoginRequiredMixin, FormView):
         """This overridden method checks if a user's phone number was
         confirmed and sends a confirmation code if it's not. Otherwise,
         it redirects to a 'phone confirmed' page.
-        
+
         :param request: user's request object
         :type request: class 'django.http.request.HttpRequest'
         """
@@ -429,12 +414,12 @@ class PhoneConfirmed(LoginRequiredMixin, TemplateView):
 
     template_name - a template that will be used for a page rendering
     """
+
     template_name = "main/phone_confirmed.html"
 
 
 def index(request):
-    """This function returns a rendered template of the site's main page.
-    """
+    """This function returns a rendered template of the site's main page."""
     turn_on_block = True
     text_for_filter = "Братухе подари на днюху черный орфографический словарь"
     if request.user.is_authenticated:
