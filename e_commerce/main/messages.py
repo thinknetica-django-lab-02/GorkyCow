@@ -12,8 +12,8 @@ def send_welcome_email(user):
     :type user: class 'django.contrib.auth.models.User'
     """
     subject = "Welcome to Bomzhon.com!"
-    text_content = f"{user.get_username}, welcome to Bomzhone.com!"
-    ctx = {"title": subject, "user_name": user.get_username}
+    text_content = f"{user.get_username()}, welcome to Bomzhone.com!"
+    ctx = {"title": subject, "user_name": user.get_username()}
     html_content = get_template("messages/welcome.html").render(ctx)
     msg = EmailMultiAlternatives(
         subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email]

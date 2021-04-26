@@ -35,10 +35,10 @@ class Seller(models.Model):
     rating = models.FloatField()
     email = models.EmailField(max_length=254)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f"Seller(name='{self.name}', status='{self.status}', "
             + f"rating={self.rating}, email='{self.email}')"
@@ -53,10 +53,10 @@ class Category(models.Model):
 
     name = models.CharField(max_length=80)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Category(name='{self.name}')"
 
 
@@ -68,10 +68,10 @@ class Tag(models.Model):
 
     name = models.CharField(max_length=80)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Tag(name='{self.name}')"
 
 
@@ -127,10 +127,10 @@ class Goods(models.Model):
     class Meta:
         ordering = ["name"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f"Goods(name='{self.name}', description='{self.description}', "
             + f"seller={self.seller}, weight={self.weight}, "
@@ -149,14 +149,17 @@ class Subscriptions(models.Model):
 
     name = models.CharField(max_length=80)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Subscriptions(name='{self.name}')"
 
+    @staticmethod
     @receiver(post_save, sender=Goods)
-    def goods_add_routine(sender, instance, created, **kwargs):
+    def goods_add_routine(
+        sender: Goods, instance: Goods, created: bool, **kwargs
+    ) -> None:
         """This method creates delayed task which sents subscribed users
         an email about a newly created good.
 
@@ -209,7 +212,7 @@ class Profile(models.Model):
         Subscriptions, verbose_name="Подписки", blank=True
     )
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         """This method returns an absolute URL to a user's profile.
 
         :return: a URL to a user's profile page
@@ -217,8 +220,11 @@ class Profile(models.Model):
         """
         return reverse("profile", kwargs={"pk": self.pk})
 
+    @staticmethod
     @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def create_user_profile(
+        sender: User, instance: User, created: bool, **kwargs
+    ) -> None:
         """This method creates a new linked Profile object when
         a user signs up.
 
@@ -238,8 +244,9 @@ class Profile(models.Model):
             Profile.objects.create(user=instance)
             send_welcome_email_task.delay(instance.id)
 
+    @staticmethod
     @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
+    def save_user_profile(sender: User, instance: User, **kwargs) -> None:
         """This method saves a linked Profile object when
         a User object was updated.
         """

@@ -2,11 +2,12 @@ from datetime import date, datetime
 
 from dateutil.relativedelta import relativedelta
 from django import forms
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, widgets
 from django.utils.translation import gettext as _
 
-from .models import Category, Goods, Profile, SMSLog, Subscriptions, Tag, User
+from .models import Category, Goods, Profile, SMSLog, Subscriptions, Tag
 
 
 class UserForm(forms.ModelForm):
