@@ -7,9 +7,12 @@ from django.apps import apps
 from django.core.cache import cache
 from django.db import transaction
 
-from .messages import (new_goods_subscribers_notification,
-                       new_goods_subscribers_weekly_notification,
-                       send_sms_to_number, send_welcome_email)
+from .messages import (
+    new_goods_subscribers_notification,
+    new_goods_subscribers_weekly_notification,
+    send_sms_to_number,
+    send_welcome_email,
+)
 
 logger = get_task_logger(__name__)
 
@@ -18,7 +21,7 @@ logger = get_task_logger(__name__)
 def send_welcome_email_task(user_id):
     """This function gets a User object by a provided id and sends to them
     a welcome email. Runs as a delayed task.
-    
+
     :param user_id: id of a user in DB
     :type user_id: int
     """
@@ -32,7 +35,7 @@ def send_welcome_email_task(user_id):
 def send_new_goods_subscribers_notification_task(goods_id, profile_id):
     """This function gets Goods and Profile objects by a provided IDs and
     sends to them an email about these Goods. Runs as a delayed task.
-    
+
     :param goods_id: id of a goods in DB
     :type goods_id: int
     :param profile_id: id of a profile in DB
@@ -76,9 +79,7 @@ def send_sms_verification_code(profile_id):
     verification_code = randrange(1000, 9999, 1)
     profile_model = apps.get_model("main.Profile")
     profile = profile_model.objects.get(id=profile_id)
-    logger.info(
-        f"Sending verification code via SMS to number: {profile.phone_number}"
-    )
+    logger.info(f"Sending verification code via SMS to number: {profile.phone_number}")
     message = send_sms_to_number(
         profile.phone_number, f"Virification code: {verification_code}"
     )
@@ -100,9 +101,7 @@ def save_views_counter_cached_values_task():
     cache_values = cache.get_many(cache_keys)
     with transaction.atomic():
         for key, value in cache_values.items():
-            goods = goods_model.objects.get(
-                id=int(key.replace("views_counter_", ""))
-            )
+            goods = goods_model.objects.get(id=int(key.replace("views_counter_", "")))
             goods.views_counter = value
             goods.save()
     logger.info("Saved goods views counters successfully")

@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 
-from .models import Goods, Subscriptions
+from .models import Goods, Subscriptions, Tag
 
 
 class FlatPageAdminForm(forms.ModelForm):
@@ -27,7 +27,12 @@ class GoodsAdmin(admin.ModelAdmin):
     list_display = ("name",)
 
 
+class TagAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+
+
 admin.site.register(Subscriptions, SubscriptionsAdmin)
 admin.site.register(Goods, GoodsAdmin)
+admin.site.register(Tag, TagAdmin)
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)

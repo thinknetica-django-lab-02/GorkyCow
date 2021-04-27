@@ -44,8 +44,7 @@ class Command(BaseCommand):
     help = "Runs apscheduler."
 
     def handle(self, *args, **options):
-        """The actual logic of the command.
-        """
+        """The actual logic of the command."""
         scheduler = BlockingScheduler(timezone=settings.TIME_ZONE)
         scheduler.add_jobstore(DjangoJobStore(), "default")
 

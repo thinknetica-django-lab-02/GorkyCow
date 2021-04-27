@@ -1,9 +1,10 @@
 import os
+from typing import Any, Dict
 
 import yaml
 
 
-def load_secrets(file_name):
+def load_secrets(file_name: str) -> Dict[str, Any]:
     """This function loads secrets from the YAML file by given name.
 
     :param file_name: name of the YAML file with secrets
