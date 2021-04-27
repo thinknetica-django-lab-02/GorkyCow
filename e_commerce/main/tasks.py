@@ -16,6 +16,12 @@ logger = get_task_logger(__name__)
 
 @shared_task
 def send_welcome_email_task(user_id):
+    """This function gets a User object by a provided id and sends to them
+    a welcome email. Runs as a delayed task.
+    
+    :param user_id: id of a user in DB
+    :type user_id: int
+    """
     logger.info(f"Sending welcome email to new user with id {user_id}")
     user_model = apps.get_model("auth.User")
     user = user_model.objects.get(id=user_id)
@@ -24,6 +30,14 @@ def send_welcome_email_task(user_id):
 
 @shared_task
 def send_new_goods_subscribers_notification_task(goods_id, profile_id):
+    """This function gets Goods and Profile objects by a provided IDs and
+    sends to them an email about these Goods. Runs as a delayed task.
+    
+    :param goods_id: id of a goods in DB
+    :type goods_id: int
+    :param profile_id: id of a profile in DB
+    :type profile_id: int
+    """
     logger.info("Sending new goods email")
     profile_model = apps.get_model("main.Profile")
     profile = profile_model.objects.get(id=profile_id)
@@ -34,6 +48,9 @@ def send_new_goods_subscribers_notification_task(goods_id, profile_id):
 
 @shared_task
 def send_weekly_new_goods_email_task():
+    """This function sends an email about new goods which was added this week
+    to subscribed users. Runs as a scheduled task.
+    """
     logger.info("Sending new goods email")
     start_date = datetime.now() - timedelta(days=7)
     goods_model = apps.get_model("main.Goods")
@@ -49,6 +66,13 @@ def send_weekly_new_goods_email_task():
 
 @shared_task
 def send_sms_verification_code(profile_id):
+    """This function generates a confirmation 4-digit code, sends it to
+    a provided user, and saves a server's response to a DB. Runs as a
+    delayed task.
+
+    :param profile_id: id of a profile in DB
+    :type profile_id: int
+    """
     verification_code = randrange(1000, 9999, 1)
     profile_model = apps.get_model("main.Profile")
     profile = profile_model.objects.get(id=profile_id)
@@ -66,6 +90,9 @@ def send_sms_verification_code(profile_id):
 
 @shared_task
 def save_views_counter_cached_values_task():
+    """This function gets goods views counters from a cache and saves them
+    to DB. Runs as a scheduled task.
+    """
     logger.info("Saving goods views counters to DB")
     goods_model = apps.get_model("main.Goods")
     goods_ids = list(goods_model.objects.all().values_list("id", flat=True))

@@ -15,6 +15,9 @@ logger = logging.getLogger(__name__)
 
 
 def send_new_goods_weekly_schedule():
+    """This job sends email weekly notification about new goods
+    to all subscribed users.
+    """
     start_date = datetime.now() - timedelta(days=7)
     new_goods = Goods.objects.filter(creation_date__gte=start_date)
 
@@ -25,14 +28,24 @@ def send_new_goods_weekly_schedule():
 
 def delete_old_job_executions(max_age=604_800):
     """This job deletes all apscheduler job
-    executions older than `max_age` from the database."""
+    executions older than `max_age` from the database.
+
+    :param max_age: maximum age of job
+    :type max_age: int
+    """
     DjangoJobExecution.objects.delete_old_job_executions(max_age)
 
 
 class Command(BaseCommand):
+    """This is a class for 'runapscheduler' management command which runs
+    scheduled jobs
+    """
+
     help = "Runs apscheduler."
 
     def handle(self, *args, **options):
+        """The actual logic of the command.
+        """
         scheduler = BlockingScheduler(timezone=settings.TIME_ZONE)
         scheduler.add_jobstore(DjangoJobStore(), "default")
 

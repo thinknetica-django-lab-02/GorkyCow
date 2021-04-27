@@ -10,6 +10,8 @@ from .models import Category, Goods, Profile, SMSLog, Subscriptions, Tag, User
 
 
 class UserForm(forms.ModelForm):
+    """This class describes a form that used to update a User object's fields.
+    """
     class Meta:
         model = User
         fields = ("first_name", "last_name", "email")
@@ -21,6 +23,9 @@ class UserForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+    """This class describes a form that used to update 
+    a Profile object's fields.
+    """
     class Meta:
         model = Profile
         fields = "__all__"
@@ -40,6 +45,9 @@ class ProfileForm(forms.ModelForm):
 
 
 class GoodsCreateUpdateForm(forms.ModelForm):
+    """This class describes a form that used to create a Goods object
+    or update an existing Goods object's fields.
+    """
     class Meta:
         model = Goods
         fields = (
@@ -76,6 +84,9 @@ class GoodsCreateUpdateForm(forms.ModelForm):
         }
 
     def clean_discount(self):
+        """This method provides a custom check for the 'discount' field and 
+        raises an error if the discount more than 90%.
+        """
         data = self.cleaned_data["discount"]
         if data > 90:
             raise ValidationError(
@@ -96,11 +107,17 @@ class ProfileFormSet(
         can_delete=False
     )
 ):
+    """This class describes a formset that used to combine the 'UserForm'
+    and the 'ProfileForm' in one.
+    """
     def __init__(self, *args, **kwargs):
         self.__initial = kwargs.pop("initial", [])
         super(ProfileFormSet, self).__init__(*args, **kwargs)
 
     def clean(self):
+        """This method provides a custom check for the 'birth_date' field and
+        raises an error if a user under 18 years old.
+        """
         super(ProfileFormSet, self).clean()
 
         for form in self.forms:
@@ -119,6 +136,9 @@ class ProfileFormSet(
 
 
 class PhoneConfirmForm(forms.Form):
+    """This class describes a form that used to confirm that
+    a phone number exists.
+    """
     code = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):
@@ -126,6 +146,9 @@ class PhoneConfirmForm(forms.Form):
         super(PhoneConfirmForm, self).__init__(*args, **kwargs)
 
     def clean_code(self):
+        """This method provides a custom check for the 'code' field and raises
+        an error if an inputted code mismatches a last sent to a user.
+        """
         sms_log = (
             SMSLog.objects.filter(user=self.request.user)
             .order_by("creation_date")
