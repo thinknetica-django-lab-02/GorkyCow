@@ -204,12 +204,12 @@ CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
-#Channels configuration
+# Channels configuration
 ASGI_APPLICATION = "e_commerce.routing.application"
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
             "hosts": [(("127.0.0.1", 6379))],
             "symmetric_encryption_keys": [SECRET_KEY],
         },
