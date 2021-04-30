@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "django_apscheduler",
     "django_celery_results",
+    "channels",
+    "chat",
 ]
 
 MIDDLEWARE = [
@@ -201,3 +203,15 @@ CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
+
+# Channels configuration
+ASGI_APPLICATION = "e_commerce.routing.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(("127.0.0.1", 6379))],
+            "symmetric_encryption_keys": [SECRET_KEY],
+        },
+    },
+}

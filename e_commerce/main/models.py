@@ -123,6 +123,7 @@ class Goods(models.Model):
     image = ImageField(upload_to="goods/", verbose_name="Фото", blank=True)
     creation_date = models.DateField(verbose_name="Дата создания")
     views_counter = models.IntegerField(default=0)
+    in_stock = models.IntegerField(default=0)
 
     class Meta:
         ordering = ["name"]

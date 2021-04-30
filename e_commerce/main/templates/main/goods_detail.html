@@ -29,7 +29,7 @@
             <div class="btn-group">
               <button type="button" class="btn btn-sm btn-outline-secondary">В корзину</button>
               {% if perms.main.change_goods %}
-                <a role="button" class="btn btn-sm btn-outline-secondary" href="{% url 'goods-edit' goods.pk %}">Редактировать</a>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.href='{% url 'goods-edit' goods.pk %}'">Редактировать</button>
               {% endif %}
             </div>
             <small class="text-muted">
