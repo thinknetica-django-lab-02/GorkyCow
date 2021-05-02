@@ -173,11 +173,12 @@ class Subscriptions(models.Model):
         :type created: bool
         """
         if created:
-            subscription = Subscriptions.objects.get(name="New goods")
-            for profile in Profile.objects.filter(subsciber=subscription):
-                send_new_goods_subscribers_notification_task.delay(
-                    instance.id, profile.id
-                )
+            subscription = Subscriptions.objects.filter(name="New goods").first()
+            if subscription:
+                for profile in Profile.objects.filter(subsciber=subscription):
+                    send_new_goods_subscribers_notification_task.delay(
+                        instance.id, profile.id
+                    )
 
 
 class Profile(models.Model):
