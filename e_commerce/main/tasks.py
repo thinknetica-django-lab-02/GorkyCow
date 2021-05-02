@@ -7,12 +7,9 @@ from django.apps import apps
 from django.core.cache import cache
 from django.db import transaction
 
-from .messages import (
-    new_goods_subscribers_notification,
-    new_goods_subscribers_weekly_notification,
-    send_sms_to_number,
-    send_welcome_email,
-)
+from .messages import (new_goods_subscribers_notification,
+                       new_goods_subscribers_weekly_notification,
+                       send_sms_to_number, send_welcome_email)
 
 logger = get_task_logger(__name__)
 
