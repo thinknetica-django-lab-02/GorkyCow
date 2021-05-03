@@ -7,7 +7,6 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
-
 from main.messages import new_goods_subscribers_weekly_notification
 from main.models import Goods, Profile, Subscriptions
 

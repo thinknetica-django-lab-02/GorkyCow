@@ -18,7 +18,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from .forms import (GoodsCreateUpdateForm, PhoneConfirmForm, ProfileFormSet,
                     UserForm)
 from .models import Goods, Profile, Seller, Tag
-from .tasks import send_sms_verification_code, create_new_tags_task
+from .tasks import create_new_tags_task, send_sms_verification_code
 
 
 class GoodsList(ListView):

@@ -2,7 +2,6 @@ from django.contrib.auth.models import Group, Permission, User
 from django.test import Client, TestCase
 from django.urls import reverse_lazy
 from django.utils.timezone import now
-
 from main.models import Category, Goods, Seller, Subscriptions
 
 

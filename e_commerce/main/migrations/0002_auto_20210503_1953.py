@@ -7,17 +7,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0001_initial'),
+        ("main", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='goods',
-            name='tags',
+            model_name="goods",
+            name="tags",
         ),
         migrations.AddField(
-            model_name='goods',
-            name='tags',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.CharField(blank=True, max_length=40, null=True), blank=True, null=True, size=None),
+            model_name="goods",
+            name="tags",
+            field=django.contrib.postgres.fields.ArrayField(
+                base_field=models.CharField(blank=True, max_length=40, null=True),
+                blank=True,
+                null=True,
+                size=None,
+            ),
         ),
     ]

@@ -78,7 +78,6 @@ class GoodsCreateUpdateForm(forms.ModelForm):
             "description": widgets.Textarea(attrs={"cols": 60, "rows": 5}),
             "weight": widgets.NumberInput(),
             "category": widgets.Select(choices=Category.objects.all()),
-            
             "size": widgets.Select(),
             "price": widgets.NumberInput(),
             "discount": widgets.NumberInput(),
