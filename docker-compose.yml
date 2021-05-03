@@ -1,28 +1,79 @@
-version: "3.2"
+version: '3.9'
+
 services:
+    db:
+      image: postgres:12.0-alpine
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      ports:
+        - 5432:5432
+      environment:
+        - POSTGRES_DB=e_commerce
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=supersecretpassword
+      networks:
+        node_net:
+          ipv4_address: 172.28.1.2
 
- redis:
-    image: "redis:alpine"
+    redis:
+      image: redis
+      restart: always
+      container_name: 'redis'
+      command: redis-server
+      ports:
+        - '6379:6379'
+      volumes:
+        - ./redis-data:/var/lib/redis
+      environment:
+        - REDIS_REPLICATION_MODE=master
+      networks:
+        node_net:
+          ipv4_address: 172.28.1.4
 
-    command: redis-server
+    web:
+      build: .
+      working_dir: /usr/src/e_commerce/e_commerce
+      restart: always
+      container_name: 'e_commerce'
+      command: python manage.py runserver 0.0.0.0:8000
+      volumes:
+        - .:/usr/src/e_commerce
+      ports:
+        - '8000:8000'
+      depends_on:
+        - db
+        - redis
+      networks:
+        node_net:
+          ipv4_address: 172.28.1.3
+      
+    celery:
+      build: .
+      working_dir: /usr/src/e_commerce/e_commerce
+      restart: always
+      container_name: 'e_commerce_celery'
+      command: celery -A e_commerce worker -B -l INFO
+      volumes:
+        - .:/usr/src/e_commerce
+      links:
+        - redis
+      depends_on:
+        - web
+        - redis
+        - db
+      networks:
+        node_net:
+          ipv4_address: 172.28.1.5
 
-    ports:
-     - "6379:6379"
+#postgres volume
+volumes:
+    postgres_data:
 
-    volumes:
-     - ./redis-data:/var/lib/redis
 
-    environment:
-     - REDIS_REPLICATION_MODE=master
-
-    networks:
-      node_net:
-        ipv4_address: 172.28.1.4
-
-# networking for the Redis container
+# networking for the containers
 networks:
-  node_net:
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.28.0.0/16
+    node_net:
+      ipam:
+        driver: default
+        config:
+          - subnet: 172.28.0.0/16
