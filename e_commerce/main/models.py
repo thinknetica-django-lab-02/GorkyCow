@@ -7,10 +7,8 @@ from django.urls import reverse
 from picklefield.fields import PickledObjectField
 from sorl.thumbnail import ImageField
 
-from main.tasks import (
-    send_new_goods_subscribers_notification_task,
-    send_welcome_email_task,
-)
+from main.tasks import (send_new_goods_subscribers_notification_task,
+                        send_welcome_email_task)
 
 
 class Seller(models.Model):
@@ -124,6 +122,8 @@ class Goods(models.Model):
     creation_date = models.DateField(verbose_name="Дата создания")
     views_counter = models.IntegerField(default=0)
     in_stock = models.IntegerField(default=0)
+    is_published = models.BooleanField(verbose_name="Опубликован", default=True)
+    is_archive = models.BooleanField(verbose_name="В архиве", default=False)
 
     class Meta:
         ordering = ["name"]

@@ -2,7 +2,7 @@ from datetime import datetime
 
 import factory
 
-from main.models import Goods, Seller, Category
+from main.models import Category, Goods, Seller
 
 
 class GoodsFactory(factory.Factory):

@@ -1,7 +1,8 @@
 from datetime import datetime
 from typing import Any, Dict, Union
 
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db.models import QuerySet
@@ -14,7 +15,8 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 
-from .forms import GoodsCreateUpdateForm, PhoneConfirmForm, ProfileFormSet, UserForm
+from .forms import (GoodsCreateUpdateForm, PhoneConfirmForm, ProfileFormSet,
+                    UserForm)
 from .models import Goods, Profile, Seller, Tag
 from .tasks import send_sms_verification_code
 
