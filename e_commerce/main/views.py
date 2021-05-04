@@ -4,6 +4,7 @@ from typing import Any, Dict, Union
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.contrib.auth.models import User
+from django.contrib.postgres.search import SearchVector
 from django.core.cache import cache
 from django.db.models import QuerySet
 from django.forms import BaseModelForm
@@ -16,7 +17,7 @@ from django.views.generic import DetailView, FormView, ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 
 from .forms import (GoodsCreateUpdateForm, PhoneConfirmForm, ProfileFormSet,
-                    UserForm)
+                    SearchForm, UserForm)
 from .models import Goods, Profile, Seller, Tag
 from .tasks import create_new_tags_task, send_sms_verification_code
 
@@ -49,12 +50,16 @@ class GoodsList(ListView):
 
     def get_queryset(self) -> QuerySet[Any]:
         """This overridden method provides a queryset filtered by tag
-        if a request contains a 'tag' parameter.
+        if a request contains a 'tag' parameter. It also supports 'search' parameter.
         """
         queryset = super().get_queryset()
         if self.request.GET.get("tag"):
             self.tag = get_object_or_404(Tag, name=self.request.GET.get("tag"))
             return queryset.filter(tags__contains=[self.tag])
+        elif self.request.GET.get("search"):
+            return self.model.objects.annotate(
+                search=SearchVector("name", "description"),
+            ).filter(search=self.request.GET.get("search"))
         else:
             return queryset
 
@@ -447,3 +452,23 @@ def index(request: HttpRequest) -> HttpResponse:
             "avatar": avatar,
         },
     )
+
+
+class SearchView(FormView):
+    """This class provides a view for a search form.
+
+    form_class - model form class
+    """
+
+    form_class = SearchForm
+
+    def get(
+        self, request: HttpRequest, *args, **kwargs
+    ) -> HttpResponseRedirect:
+        """This overridden method redirects search requests to GoodsListView
+        with a 'search' parameter provided.
+
+        :param request: user's request object
+        :type request: class 'django.http.request.HttpRequest'
+        """
+        return HttpResponseRedirect(reverse_lazy("goods"))
