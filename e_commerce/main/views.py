@@ -18,7 +18,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from .forms import (GoodsCreateUpdateForm, PhoneConfirmForm, ProfileFormSet,
                     UserForm)
 from .models import Goods, Profile, Seller, Tag
-from .tasks import send_sms_verification_code
+from .tasks import create_new_tags_task, send_sms_verification_code
 
 
 class GoodsList(ListView):
@@ -54,7 +54,7 @@ class GoodsList(ListView):
         queryset = super().get_queryset()
         if self.request.GET.get("tag"):
             self.tag = get_object_or_404(Tag, name=self.request.GET.get("tag"))
-            return queryset.filter(tags=self.tag)
+            return queryset.filter(tags__contains=[self.tag])
         else:
             return queryset
 
@@ -169,6 +169,7 @@ class GoodsCreate(PermissionRequiredMixin, CreateView):
         temp_goods.seller = Seller.objects.get(name="Bobbie's Bits")
         temp_goods.creation_date = datetime.now()
         self.object = form.save()
+        create_new_tags_task.delay(self.object.tags)
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form: BaseModelForm) -> HttpResponse:
@@ -256,6 +257,7 @@ class GoodsUpdate(PermissionRequiredMixin, UpdateView):
         :type form: class 'main.forms.GoodsCreateUpdateForm'
         """
         self.object = form.save()
+        create_new_tags_task.delay(self.object.tags)
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form: BaseModelForm) -> HttpResponse:
@@ -414,7 +416,7 @@ class PhoneConfirmation(LoginRequiredMixin, FormView):
         if request.user.profile.is_phone_confirmed:
             return HttpResponseRedirect(self.get_success_url())
         else:
-            send_sms_verification_code(request.user.profile.id)
+            send_sms_verification_code.delay(request.user.profile.id)
             return self.render_to_response(self.get_context_data())
 
 

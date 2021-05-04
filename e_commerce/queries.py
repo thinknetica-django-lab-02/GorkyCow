@@ -1,5 +1,4 @@
 from django.contrib.auth.models import Group, Permission
-
 from main.models import Category, Goods, Seller, Tag
 
 cat = Category(name="Toys")

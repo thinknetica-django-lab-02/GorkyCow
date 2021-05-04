@@ -32,9 +32,10 @@ services:
 
     web:
       build: .
+      user: "${UID}:${GID}"
       working_dir: /usr/src/e_commerce/e_commerce
       restart: always
-      container_name: 'e_commerce'
+      container_name: 'e_commerce_app'
       command: python manage.py runserver 0.0.0.0:8000
       volumes:
         - .:/usr/src/e_commerce
@@ -49,6 +50,7 @@ services:
       
     celery:
       build: .
+      user: "${UID}:${GID}"
       working_dir: /usr/src/e_commerce/e_commerce
       restart: always
       container_name: 'e_commerce_celery'

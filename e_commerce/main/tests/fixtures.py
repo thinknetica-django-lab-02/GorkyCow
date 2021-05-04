@@ -1,7 +1,6 @@
 from datetime import datetime
 
 import factory
-
 from main.models import Category, Goods, Seller
 
 

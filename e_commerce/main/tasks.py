@@ -102,3 +102,17 @@ def save_views_counter_cached_values_task():
             goods.views_counter = value
             goods.save()
     logger.info("Saved goods views counters successfully")
+
+
+@shared_task
+def create_new_tags_task(tags_list):
+    """This function checks if tags exist and create it if not
+
+    :param tags_list: tags
+    :type tags_list: List
+    """
+    logger.info("Start task: create_new_tags_task")
+    tags_model = apps.get_model("main.Tag")
+    for tag_name in tags_list:
+        tags_model.objects.get_or_create(name=tag_name)
+    logger.info("Finish task: create_new_tags_task")

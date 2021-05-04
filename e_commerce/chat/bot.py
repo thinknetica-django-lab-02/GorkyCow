@@ -1,7 +1,6 @@
 from typing import Union
 
 from asgiref.sync import sync_to_async
-
 from main.models import Goods
 
 

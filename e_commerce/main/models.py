@@ -1,14 +1,14 @@
 from django.contrib.auth.models import Group, User
+from django.contrib.postgres.fields import ArrayField
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
-from picklefield.fields import PickledObjectField
-from sorl.thumbnail import ImageField
-
 from main.tasks import (send_new_goods_subscribers_notification_task,
                         send_welcome_email_task)
+from picklefield.fields import PickledObjectField
+from sorl.thumbnail import ImageField
 
 
 class Seller(models.Model):
@@ -64,7 +64,7 @@ class Tag(models.Model):
     name - a name of a tag
     """
 
-    name = models.CharField(max_length=80)
+    name = models.CharField(max_length=80, unique=True)
 
     def __str__(self) -> str:
         return self.name
@@ -113,7 +113,9 @@ class Goods(models.Model):
         null=True,
     )
     manufacturer = models.CharField(max_length=80)
-    tags = models.ManyToManyField(Tag)
+    tags = ArrayField(
+        models.CharField(max_length=40, blank=True, null=True), blank=True, null=True
+    )
     size = models.CharField(max_length=1, choices=SIZES, null=True, blank=True)
     rating = models.FloatField(default=5.0)
     price = models.FloatField(default=0)
@@ -136,7 +138,7 @@ class Goods(models.Model):
             f"Goods(name='{self.name}', description='{self.description}', "
             + f"seller={self.seller}, weight={self.weight}, "
             + f"category={self.category}, manufacturer='{self.manufacturer}'"
-            + f", tags={self.tags.all()}, size='{self.size}', "
+            + f", tags={self.tags}, size='{self.size}', "
             + f"rating={self.rating}, price={self.price}, "
             + f"image={self.image or None})"
         )
