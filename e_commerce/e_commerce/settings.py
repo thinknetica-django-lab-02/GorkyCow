@@ -94,8 +94,11 @@ WSGI_APPLICATION = "e_commerce.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": secrets["db"]["HOST"],
+        "NAME": secrets["db"]["NAME"],
+        "USER": secrets["db"]["USER"],
+        "PASSWORD": secrets["db"]["PASSWORD"],
     }
 }
 
@@ -155,7 +158,7 @@ DEFAULT_FROM_EMAIL = "no-reply@bomzhon.com"
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": "redis://redis:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
@@ -199,7 +202,7 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_RESULT_BACKEND = "django-cache"
 CELERY_CACHE_BACKEND = "default"
-CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
@@ -210,7 +213,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(("127.0.0.1", 6379))],
+            "hosts": [(("redis", 6379))],
             "symmetric_encryption_keys": [SECRET_KEY],
         },
     },
