@@ -274,3 +274,32 @@ class SMSLog(models.Model):
     code = models.PositiveIntegerField()
     message = PickledObjectField()
     creation_date = models.DateTimeField(auto_now_add=True)
+
+
+class GoodsShort(models.Model):
+    """This class describes how to store and operate data about goods.
+
+    name - a name of a good
+    description - a long text description which will be displayed in
+    a detailed view
+    manufacturer - a manufacturer of this good
+    tags - foreign keys of a tags of this good
+    price - a current price
+    creation_date - a date when a good had been created
+    views_counter - a current views counter
+    """
+    class Meta:
+        managed = False
+
+    name = models.CharField(max_length=80)
+    description = models.TextField()
+    manufacturer = models.CharField(max_length=80)
+    tags = ArrayField(
+        models.CharField(max_length=40, blank=True, null=True), blank=True, null=True
+    )
+    price = models.FloatField(default=0)
+    creation_date = models.DateField(verbose_name="Дата создания")
+    views_counter = models.IntegerField(default=0)
+    in_stock = models.IntegerField(default=0)
+    is_published = models.BooleanField(verbose_name="Опубликован", default=True)
+    is_archive = models.BooleanField(verbose_name="В архиве", default=False)
