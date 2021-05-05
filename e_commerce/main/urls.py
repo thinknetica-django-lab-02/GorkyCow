@@ -31,6 +31,7 @@ urlpatterns = [
         name="profile",
     ),
     path("accounts/", include("allauth.urls")),
+    path("search/", views.SearchView.as_view(), name="search"),
 ]
 
 if settings.DEBUG:

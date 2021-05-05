@@ -162,3 +162,9 @@ class PhoneConfirmForm(forms.Form):
             profile.is_phone_confirmed = True
             profile.save()
         return code
+
+
+class SearchForm(forms.Form):
+    """This class describes a form that used for searching goods."""
+
+    search = forms.TextInput()
