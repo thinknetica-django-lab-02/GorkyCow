@@ -1,4 +1,7 @@
-{% extends "main/base.html" %}
+{% extends request.is_mobile|yesno:"main/mobile_base.html,main/base.html" %}
+{% block meta %}
+    <meta name="description" content="Описание товарова – интернет-магазина Bomzhon" />
+{% endblock %}
 
 {% block page_title_header %}<title>Каталог</title>{% endblock %}
 

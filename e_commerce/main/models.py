@@ -288,6 +288,7 @@ class GoodsShort(models.Model):
     creation_date - a date when a good had been created
     views_counter - a current views counter
     """
+
     class Meta:
         managed = False
 

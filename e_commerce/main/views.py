@@ -462,9 +462,7 @@ class SearchView(FormView):
 
     form_class = SearchForm
 
-    def get(
-        self, request: HttpRequest, *args, **kwargs
-    ) -> HttpResponseRedirect:
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponseRedirect:
         """This overridden method redirects search requests to GoodsListView
         with a 'search' parameter provided.
 
