@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.flatpages",
+    "django.contrib.sitemaps",
     "main",
     "ckeditor",
     "sorl.thumbnail",
@@ -66,6 +67,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "main.middleware.CheckMobileMiddleware",
 ]
 
 ROOT_URLCONF = "e_commerce.urls"
@@ -215,6 +217,78 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [(("redis", 6379))],
             "symmetric_encryption_keys": [SECRET_KEY],
+        },
+    },
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "log_formatter": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "django_all": {
+            "level": "WARNING",
+            "class": "logging.FileHandler",
+            "filename": PROJECT_ROOT + "/../logs/django.log",
+        },
+        "file": {
+            "level": "WARNING",
+            "class": "logging.FileHandler",
+            "filename": PROJECT_ROOT + "/../logs/app.log",
+            "formatter": "log_formatter",
+        },
+        "mail_admins": {
+            "level": "WARNING",
+            "class": "django.utils.log.AdminEmailHandler",
+            "email_backend": "django.core.mail.backends.filebased.EmailBackend",
+            "include_html": True,
+        },
+    },
+    "loggers": {
+        "main": {
+            "handlers": ["file", "mail_admins", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.server": {
+            "handlers": ["django_all", "console"],
+            "level": "WARNING",
+        },
+        "django": {
+            "handlers": ["django_all", "console"],
+            "level": "WARNING",
+        },
+        "django.request": {
+            "handlers": ["mail_admins"],
+            "level": "WARNING",
+        },
+        "django.db.backends": {
+            "handlers": ["django_all"],
+            "level": "WARNING",
+        },
+        "django.channels.server": {
+            "handlers": ["django_all", "console"],
+            "level": "INFO",
         },
     },
 }
