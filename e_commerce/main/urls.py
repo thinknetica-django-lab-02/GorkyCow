@@ -1,9 +1,18 @@
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.flatpages.sitemaps import FlatPageSitemap
+from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views.decorators.cache import cache_page
+from django.views.generic.base import TemplateView
+from main.sitemap import GoodsViewSitemap
 
 from . import views
+
+sitemaps = {
+    "static": FlatPageSitemap,
+    "goods": GoodsViewSitemap,
+}
 
 urlpatterns = [
     path("", cache_page(60 * 15)(views.index), name="index"),
@@ -32,6 +41,18 @@ urlpatterns = [
     ),
     path("accounts/", include("allauth.urls")),
     path("search/", views.SearchView.as_view(), name="search"),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+    path(
+        "robots.txt",
+        TemplateView.as_view(
+            template_name="main/robots.txt", content_type="text/plain"
+        ),
+    ),
 ]
 
 if settings.DEBUG:
